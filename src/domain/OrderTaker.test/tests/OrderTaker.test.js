@@ -1,13 +1,13 @@
 import { Appetizer, Dessert, Drink, MainCourse } from '../../Food/index.js';
 import OrderDetail from '../../OrderDetail/OrderDetail.js';
-import FoodProvider from '../OrderTaker.js';
+import OrderTaker from '../OrderTaker.js';
 
-describe('FoodProvider 테스트', () => {
-  /** @type {FoodProvider} */
-  let foodProvider;
+describe('OrderTaker 테스트', () => {
+  /** @type {OrderTaker} */
+  let orderTaker;
 
   beforeEach(() => {
-    foodProvider = FoodProvider.of();
+    orderTaker = OrderTaker.of();
   });
 
   it.each([
@@ -27,7 +27,7 @@ describe('FoodProvider 테스트', () => {
     '`receiveFoods` 호출 시 주문 내역을 반환한다. (메뉴: $name, 가격: $price, 카테고리: $category.name)',
     ({ name, category, price }) => {
       // given & when
-      const result = foodProvider.receiveFoods(name, 1);
+      const result = orderTaker.receiveOrder(name, 1);
 
       expect(result).toBeInstanceOf(OrderDetail);
       expect(result.getPrice()).toEqual({ cost: price, discount: 0, payment: price });
