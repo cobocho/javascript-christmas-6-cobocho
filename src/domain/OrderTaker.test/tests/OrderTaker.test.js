@@ -24,10 +24,10 @@ describe('OrderTaker 테스트', () => {
     { name: '레드와인', category: Drink, price: 60_000 },
     { name: '샴페인', category: Drink, price: 25_000 },
   ])(
-    '`receiveFoods` 호출 시 주문 내역을 반환한다. (메뉴: $name, 가격: $price, 카테고리: $category.name)',
+    '`takeOrder` 호출 시 주문 내역을 반환한다. (메뉴: $name, 가격: $price, 카테고리: $category.name)',
     ({ name, category, price }) => {
       // given & when
-      const result = orderTaker.receiveOrder(name, 1);
+      const result = orderTaker.takeOrder(name, 1);
 
       expect(result).toBeInstanceOf(OrderDetail);
       expect(result.getPrice()).toEqual({ cost: price, discount: 0, payment: price });

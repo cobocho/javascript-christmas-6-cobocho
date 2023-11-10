@@ -82,7 +82,7 @@ class OrderTaker {
    * @param {number} quantity
    * @returns {OrderDetail}
    */
-  receiveOrder(name, quantity) {
+  takeOrder(name, quantity) {
     const { foodName, price, foodCategory } = this.#findMenu(name);
     const orderDetail = OrderDetail.of({ foodName, price, foodCategory, quantity });
     return orderDetail;

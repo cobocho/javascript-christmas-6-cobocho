@@ -217,7 +217,7 @@
 
 - [ ] OrderTaker
 
-  - [ ] `receiveOrder` 호출 시 `OrderDetail`을 반환한다.
+  - [ ] `takeOrder` 호출 시 `OrderDetail`을 반환한다.
 
 - [ ] FoodProvider 예외 처리
 
