@@ -10,6 +10,15 @@ const OrderService = Object.freeze({
     const receiptDate = new Date(`2023-12-${date}`);
     return Receipt.of(receiptDate);
   },
+
+  /**
+   * 주문을 받아 영수증에 기입합니다.
+   * @param {Receipt} receipt - 주문을 기록할 영수증입니다.
+   * @param {{ name: string, quantity: number }[]} orders - 주문 내용입니다.
+   */
+  orderFoods(receipt, orders) {
+    receipt.orderMany(orders);
+  },
 });
 
 export default OrderService;

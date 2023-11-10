@@ -14,10 +14,19 @@ const InputView = Object.freeze({
 
   /**
    * 사용자에게 방문 일자를 받아옵니다.
-   * @returns {Promise<string>} 사용자의 방문일입니다.
+   * @returns {Promise<string | null>} 사용자의 방문일입니다.
    */
   async readVisitDate() {
     const input = await this.read(QUERIES.visitDate);
+    return input || null;
+  },
+
+  /**
+   * 사용자에게 메뉴를 받아옵니다.
+   * @returns {Promise<string>} 사용자의 주문 메뉴입니다.
+   */
+  async readOrderMenus() {
+    const input = await this.read(QUERIES.orderMenus);
     return input;
   },
 });
