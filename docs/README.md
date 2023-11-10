@@ -215,13 +215,13 @@
   - [x] `getPrice` 호출 시 `PriceInfo`를 반환한다.
   - [x] `toString` 호출 시 `${name} ${quantity}개`를 반환한다.
 
-- [ ] OrderTaker
+- [x] OrderTaker
 
-  - [ ] `takeOrder` 호출 시 `OrderDetail`을 반환한다.
+  - [x] `takeOrder` 호출 시 `OrderDetail`을 반환한다.
 
-- [ ] FoodProvider 예외 처리
+- [x] FoodProvider 예외 처리
 
-  - [ ] 존재하지 않는 메뉴일시 에러가 발생한다.
+  - [x] 존재하지 않는 메뉴일시 에러가 발생한다.
 
 - [ ] Receipt
 

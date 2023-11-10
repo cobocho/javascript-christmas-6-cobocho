@@ -1,3 +1,4 @@
+import ApplicationError from '../../exceptions/ApplicationError.js';
 import { Appetizer, Dessert, Drink, MainCourse } from '../Food/index.js';
 import OrderDetail from '../OrderDetail/OrderDetail.js';
 
@@ -9,7 +10,10 @@ import OrderDetail from '../OrderDetail/OrderDetail.js';
  */
 
 class OrderTaker {
-  /** @type {MenuInfo[]} */
+  /**
+   * 메뉴판입니다.
+   * @type {MenuInfo[]}
+   */
   #menu = [
     {
       foodName: '양송이수프',
@@ -73,23 +77,43 @@ class OrderTaker {
     },
   ];
 
+  /**
+   * 오더 테이커의 에러 메세지입니다.
+   * @readonly
+   */ static ERROR_MESSAGES = {
+    invalidOrder: '유효하지 않은 주문입니다. 다시 입력해 주세요.',
+  };
+
   static of() {
     return new OrderTaker();
   }
 
   /**
-   * @param {string} name
-   * @param {number} quantity
-   * @returns {OrderDetail}
+   * 주문을 받아 주문 내역을 반환합니다.
+   * @param {string} name 주문한 메뉴의 이름입니다.
+   * @param {number} quantity 주문한 메뉴의 갯수입니다.
+   * @returns {OrderDetail} 주문 내역입니다.
    */
   takeOrder(name, quantity) {
     const { foodName, price, foodCategory } = this.#findMenu(name);
     const orderDetail = OrderDetail.of({ foodName, price, foodCategory, quantity });
+
     return orderDetail;
   }
 
+  /**
+   * 메뉴판에서 메뉴를 찾아 반환합니다.
+   * @param {string} name 메뉴의 이름입니다.
+   * @returns {MenuInfo} 메뉴입니다.
+   */
   #findMenu(name) {
-    return this.#menu.find((food) => food.foodName === name);
+    const result = this.#menu.find((food) => food.foodName === name);
+
+    if (!result) {
+      throw new ApplicationError(OrderTaker.ERROR_MESSAGES.invalidOrder);
+    }
+
+    return result;
   }
 }
 
