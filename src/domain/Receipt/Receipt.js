@@ -4,8 +4,6 @@ import Food from '../Food/Food.js';
 import OrderDetail from '../OrderDetail/OrderDetail.js';
 import OrderTaker from '../OrderTaker/OrderTaker.js';
 
-/** */
-
 class Receipt {
   /**
    * 영수증의 에러 메세지입니다.
@@ -50,6 +48,17 @@ class Receipt {
   }
 
   /**
+   * 주문을 한번에 여러개를 반영합니다.
+   * @param {{ name: string, quantity: number }[]} orders 주문한 메뉴 내역들입니다.
+   */
+  orderMany(orders) {
+    orders.forEach(({ name, quantity }) => {
+      const orderDetail = OrderTaker.takeOrder(name, quantity);
+      this.#orderDetails.push(orderDetail);
+    });
+  }
+
+  /**
    * 주문을 하여 주문 내역에 반영합니다.
    * @param {string} name 주문한 메뉴의 이름입니다.
    * @param {number} quantity 주문한 메뉴의 갯수입니다.
@@ -57,6 +66,14 @@ class Receipt {
   order(name, quantity) {
     const orderDetail = OrderTaker.takeOrder(name, quantity);
     this.#orderDetails.push(orderDetail);
+  }
+
+  /**
+   * 영수증의 주문 내역을 반환합니다.
+   * @returns {OrderDetail[]} 영수증의 모든 메뉴입니다.
+   */
+  getOrderDetails() {
+    return this.#orderDetails;
   }
 
   /**

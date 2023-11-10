@@ -87,7 +87,7 @@ const OrderTaker = Object.freeze({
 
   /**
    * 주문을 받아 주문 내역을 반환합니다.
-   * @param {string} name 주문한 메뉴의 이름입니다.
+   * @param {string} name 주문한 메뉴의 s.
    * @param {number} quantity 주문한 메뉴의 갯수입니다.
    * @returns {OrderDetail} 주문 내역입니다.
    */

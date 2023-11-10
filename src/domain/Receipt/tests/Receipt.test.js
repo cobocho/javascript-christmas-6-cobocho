@@ -1,4 +1,5 @@
-import { Appetizer, Dessert, MainCourse } from '../../Food/index.js';
+import { Appetizer, Dessert, Drink, MainCourse } from '../../Food/index.js';
+import OrderDetail from '../../OrderDetail/OrderDetail.js';
 import Receipt from '../Receipt.js';
 
 describe('Receipt 테스트', () => {
@@ -42,5 +43,60 @@ describe('Receipt 테스트', () => {
       benefit: 0,
       payment: 37_000,
     });
+  });
+
+  it('`order` 호출 시 주문 내역을 `orderDetails`에 반영한다.', () => {
+    // given
+    const receipt = Receipt.of(new Date());
+    receipt.order('시저샐러드', 3);
+
+    // when
+    const orderDetails = receipt.getOrderDetails();
+
+    // then
+    expect(orderDetails).toEqual([
+      OrderDetail.of({
+        foodName: '시저샐러드',
+        foodCategory: Appetizer,
+        quantity: 3,
+        price: 8_000,
+      }),
+    ]);
+  });
+
+  it('`orderMany` 호출 시 주문 내역을 한번에 여러개 반영한다.', () => {
+    // given
+    const receipt = Receipt.of(new Date());
+    const orders = [
+      { name: '시저샐러드', quantity: 1 },
+      { name: '아이스크림', quantity: 1 },
+      { name: '제로콜라', quantity: 1 },
+    ];
+    receipt.orderMany(orders);
+
+    // when
+    const orderDetails = receipt.getOrderDetails();
+
+    // then
+    expect(orderDetails).toEqual([
+      OrderDetail.of({
+        foodName: '시저샐러드',
+        foodCategory: Appetizer,
+        quantity: 1,
+        price: 8_000,
+      }),
+      OrderDetail.of({
+        foodName: '아이스크림',
+        foodCategory: Dessert,
+        quantity: 1,
+        price: 5_000,
+      }),
+      OrderDetail.of({
+        foodName: '제로콜라',
+        foodCategory: Drink,
+        quantity: 1,
+        price: 3_000,
+      }),
+    ]);
   });
 });
