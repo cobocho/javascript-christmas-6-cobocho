@@ -202,10 +202,10 @@
 
 ## 도메인 구현
 
-- [ ] Food
+- [x] Food
 
-  - [ ] 인자로 `name`과 `price`를 받는다.
-  - [ ] `getPrice` 호출 시 `PriceInfo`를 반환한다.
+  - [x] 인자로 `name`과 `price`를 받는다.
+  - [x] `getPrice` 호출 시 `PriceInfo`를 반환한다.
 
 - [ ] Food 예외 처리
 
