@@ -15,6 +15,12 @@ class Receipt {
   });
 
   /**
+   * 영수증 하나에 가능한 최대 음식 수 입니다.
+   * @readonly
+   */
+  static MAX_FOOD_QUANTITY = 20;
+
+  /**
    * 영수증의 주문 내역입니다.
    * @type {OrderDetail}
    */
@@ -66,7 +72,12 @@ class Receipt {
    */
   #validateOrderMany(orders) {
     const names = Array.from(orders, (order) => order.name);
+    const totalQuantity = orders.reduce((total, order) => total + order.quantity, 0);
+
     if (isDuplicated(names)) {
+      throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
+    }
+    if (totalQuantity > Receipt.MAX_FOOD_QUANTITY) {
       throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
     }
   }

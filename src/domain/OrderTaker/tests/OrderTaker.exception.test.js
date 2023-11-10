@@ -11,4 +11,14 @@ describe('OrderTaker 테스트', () => {
       expect(result).toThrow(OrderTaker.ERROR_MESSAGES.invalidOrder);
     },
   );
+  it.each([{ quantity: 0 }, { quantity: 0.5 }, { quantity: -1 }])(
+    '`takeOrder` 호출 시 유효하지 않은 갯수 입력 시 에러가 발생한다.',
+    ({ quantity }) => {
+      // given & when
+      const result = () => OrderTaker.takeOrder('아이스크림', quantity);
+
+      // then
+      expect(result).toThrow(OrderTaker.ERROR_MESSAGES.invalidOrder);
+    },
+  );
 });

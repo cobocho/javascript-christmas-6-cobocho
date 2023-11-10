@@ -34,4 +34,25 @@ describe('Receipt 예외 테스트', () => {
     // then
     expect(result).toThrow(Receipt.ERROR_MESSAGES.invalidOrder);
   });
+
+  it.each([
+    {
+      orders: [{ name: '아이스크림', quantity: 21 }],
+    },
+    {
+      orders: [
+        { name: '아이스크림', quantity: 15 },
+        { name: '제로콜라', quantity: 6 },
+      ],
+    },
+  ])(`${Receipt.MAX_FOOD_QUANTITY}개 이상 주문 시 에러가 발생한다.`, ({ orders }) => {
+    // given
+    const receipt = Receipt.of(new Date());
+
+    // when
+    const result = () => receipt.orderMany(orders);
+
+    // then
+    expect(result).toThrow(Receipt.ERROR_MESSAGES.invalidOrder);
+  });
 });

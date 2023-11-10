@@ -93,6 +93,11 @@ const OrderTaker = Object.freeze({
    */
   takeOrder(name, quantity) {
     const { foodName, price, foodCategory } = this.findMenu(name);
+    const MIN_QUANTITY = 1;
+
+    if (quantity < MIN_QUANTITY || !Number.isInteger(quantity)) {
+      throw new ApplicationError(this.ERROR_MESSAGES.invalidOrder);
+    }
     const orderDetail = OrderDetail.of({ foodName, price, foodCategory, quantity });
 
     return orderDetail;
