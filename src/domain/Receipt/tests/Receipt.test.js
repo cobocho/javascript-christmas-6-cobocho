@@ -70,7 +70,7 @@ describe('Receipt 테스트', () => {
     const orders = [
       { name: '시저샐러드', quantity: 1 },
       { name: '아이스크림', quantity: 1 },
-      { name: '제로콜라', quantity: 1 },
+      { name: '제로콜라', quantity: 18 },
     ];
     receipt.orderMany(orders);
 
@@ -94,7 +94,7 @@ describe('Receipt 테스트', () => {
       OrderDetail.of({
         foodName: '제로콜라',
         foodCategory: Drink,
-        quantity: 1,
+        quantity: 18,
         price: 3_000,
       }),
     ]);

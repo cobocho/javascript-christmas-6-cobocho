@@ -1,5 +1,6 @@
 import ApplicationError from '../../exceptions/ApplicationError.js';
 import { isDuplicated, isInvalidDate } from '../../utils/validator/validator.js';
+import Drink from '../Food/Drink.js';
 import Food from '../Food/Food.js';
 import OrderDetail from '../OrderDetail/OrderDetail.js';
 import OrderTaker from '../OrderTaker/OrderTaker.js';
@@ -73,11 +74,14 @@ class Receipt {
   #validateOrderMany(orders) {
     const names = Array.from(orders, (order) => order.name);
     const totalQuantity = orders.reduce((total, order) => total + order.quantity, 0);
-
+    const categories = Array.from(names, (name) => OrderTaker.findMenu(name).foodCategory);
     if (isDuplicated(names)) {
       throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
     }
     if (totalQuantity > Receipt.MAX_FOOD_QUANTITY) {
+      throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
+    }
+    if (categories.every((category) => category === Drink)) {
       throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
     }
   }
