@@ -223,11 +223,11 @@
 
   - [x] 존재하지 않는 메뉴일시 에러가 발생한다.
 
-- [ ] Receipt
+- [x] Receipt
 
-  - [ ] `order` 호출 시 `orderDetails`에 `OrderDetail`이 추가된다.
-  - [ ] `getAllFoods` 호출 시 모든 `Food`를 반환한다.
-  - [ ] `getPrice` 호출 시 `PriceInfo`를 반환한다.
+  - [x] `order` 호출 시 `orderDetails`에 `OrderDetail`이 추가된다.
+  - [x] `getAllFoods` 호출 시 모든 `orderDetails`의 모든 `Food`를 반환한다.
+  - [x] `getPrice` 호출 시 `ReceiptPriceInfo`를 반환한다.
 
 # 과제 진행 요구 사항
 
