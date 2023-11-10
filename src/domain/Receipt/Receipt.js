@@ -1,5 +1,5 @@
 import ApplicationError from '../../exceptions/ApplicationError.js';
-import { isInvalidDate } from '../../utils/validator/validator.js';
+import { isDuplicated, isInvalidDate } from '../../utils/validator/validator.js';
 import Food from '../Food/Food.js';
 import OrderDetail from '../OrderDetail/OrderDetail.js';
 import OrderTaker from '../OrderTaker/OrderTaker.js';
@@ -11,6 +11,7 @@ class Receipt {
    */
   static ERROR_MESSAGES = Object.freeze({
     invalidDate: '유효하지 않은 날짜입니다. 다시 입력해 주세요.',
+    invalidOrder: '유효하지 않은 주문입니다. 다시 입력해 주세요.',
   });
 
   /**
@@ -52,10 +53,22 @@ class Receipt {
    * @param {{ name: string, quantity: number }[]} orders 주문한 메뉴 내역들입니다.
    */
   orderMany(orders) {
+    this.#validateOrderMany(orders);
     orders.forEach(({ name, quantity }) => {
       const orderDetail = OrderTaker.takeOrder(name, quantity);
       this.#orderDetails.push(orderDetail);
     });
+  }
+
+  /**
+   * 주문의 유효성을 검사합니다.
+   * @param {{ name: string, quantity: number }[]} orders 주문한 메뉴 내역들입니다.
+   */
+  #validateOrderMany(orders) {
+    const names = Array.from(orders, (order) => order.name);
+    if (isDuplicated(names)) {
+      throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
+    }
   }
 
   /**

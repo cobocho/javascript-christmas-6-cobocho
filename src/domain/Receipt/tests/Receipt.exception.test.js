@@ -19,4 +19,19 @@ describe('Receipt 예외 테스트', () => {
     // then
     expect(result).toThrow(Receipt.ERROR_MESSAGES.invalidDate);
   });
+
+  it('`orderMany` 호출 시 동일한 메뉴를 재주문 시 에러가 발생한다.', () => {
+    // given
+    const receipt = Receipt.of(new Date());
+    const duplicatedOrders = [
+      { name: '아이스크림', quantity: 1 },
+      { name: '아이스크림', quantity: 2 },
+    ];
+
+    // when
+    const result = () => receipt.orderMany(duplicatedOrders);
+
+    // then
+    expect(result).toThrow(Receipt.ERROR_MESSAGES.invalidOrder);
+  });
 });
