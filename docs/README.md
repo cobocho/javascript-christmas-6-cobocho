@@ -207,29 +207,21 @@
   - [x] 인자로 `name`과 `price`를 받는다.
   - [x] `getPrice` 호출 시 `PriceInfo`를 반환한다.
 
-- [ ] Food 예외 처리
+- [x] OrderDetail
 
-  - [ ] `name`이 공백일시 에러가 발생한다.
+  - [x] 인자로 `foodName`과 `quantity`를 받는다.
+  - [x] `getQuantity` 호출 시 `foods`의 갯수를 반환한다.
+  - [x] `getFoods` 호출 시 `quantity` 만큼의 `Food`를 반환한다.
+  - [x] `getPrice` 호출 시 `PriceInfo`를 반환한다.
+  - [x] `toString` 호출 시 `${name} ${quantity}개`를 반환한다.
 
-- [ ] OrderDetail
+- [ ] OrderTaker
 
-  - [ ] 인자로 `foodName`과 `quantity`를 받는다.
-  - [ ] `getPrice` 호출 시 `PriceInfo`를 반환한다.
-  - [ ] `getQuantity` 호출 시 `foods`의 갯수를 반환한다.
-  - [ ] `getFoods` 호출 시 `quantity` 만큼의 `Food`를 반환한다.
-  - [ ] `toString` 호출 시 `${name} ${quantity}개`를 반환한다.
-
-- [ ] OrderDetail 예외 처리
-
-  - [ ] `foodName`이 공백일시 에러가 발생한다.
-
-- [ ] FoodProvider
-
-  - [ ] `receiveFoods` 호출 시 `quantity`만큼의 `Food`를 반환한다.
+  - [ ] `receiveOrder` 호출 시 `OrderDetail`을 반환한다.
 
 - [ ] FoodProvider 예외 처리
 
-  - [ ] 존재하지 않는 음식일시 에러가 발생한다.
+  - [ ] 존재하지 않는 메뉴일시 에러가 발생한다.
 
 - [ ] Receipt
 
