@@ -3,13 +3,6 @@ import OrderDetail from '../../OrderDetail/OrderDetail.js';
 import OrderTaker from '../OrderTaker.js';
 
 describe('OrderTaker 테스트', () => {
-  /** @type {OrderTaker} */
-  let orderTaker;
-
-  beforeEach(() => {
-    orderTaker = OrderTaker.of();
-  });
-
   it.each([
     { name: '양송이수프', category: Appetizer, price: 6_000 },
     { name: '타파스', category: Appetizer, price: 5_500 },
@@ -27,7 +20,7 @@ describe('OrderTaker 테스트', () => {
     '`takeOrder` 호출 시 주문 내역을 반환한다. (메뉴: $name, 가격: $price, 카테고리: $category.name)',
     ({ name, category, price }) => {
       // given & when
-      const result = orderTaker.takeOrder(name, 1);
+      const result = OrderTaker.takeOrder(name, 1);
 
       expect(result).toBeInstanceOf(OrderDetail);
       expect(result.getPrice()).toEqual({ cost: price, discount: 0, payment: price });

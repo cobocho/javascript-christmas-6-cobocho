@@ -2,15 +2,9 @@ import { Appetizer, Dessert, MainCourse } from '../../Food/index.js';
 import Receipt from '../Receipt.js';
 
 describe('Receipt 테스트', () => {
-  /** @type {Receipt} */
-  let receipt;
-
-  beforeEach(() => {
-    receipt = Receipt.of();
-  });
-
   it('`getAllFoods` 호출 시 모든 `orderDetails`의 모든 `Food`를 반환한다.', () => {
     // given
+    const receipt = Receipt.of(new Date());
     receipt.order('시저샐러드', 1);
     receipt.order('크리스마스파스타', 3);
     receipt.order('아이스크림', 2);
@@ -33,6 +27,7 @@ describe('Receipt 테스트', () => {
 
   it('`getPrice` 호출 시 `ReceiptPriceInfo`를 반환한다.', () => {
     // given
+    const receipt = Receipt.of(new Date());
     receipt.order('시저샐러드', 3); // 8,000원 * 3ea = 24,000원
     receipt.order('아이스크림', 2); // 5,000원 * 2ea = 10,000원
     receipt.order('제로콜라', 1); // 3,000원 * 1ea = 3,000원, 총 37,000원

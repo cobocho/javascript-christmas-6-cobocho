@@ -9,12 +9,13 @@ import OrderDetail from '../OrderDetail/OrderDetail.js';
  * @property {number} price - 음식의 가격입니다.
  */
 
-class OrderTaker {
+const OrderTaker = Object.freeze({
   /**
    * 메뉴판입니다.
+   * @readonly
    * @type {MenuInfo[]}
    */
-  #menu = [
+  menu: [
     {
       foodName: '양송이수프',
       foodCategory: Appetizer,
@@ -75,18 +76,14 @@ class OrderTaker {
       foodCategory: Drink,
       price: 25_000,
     },
-  ];
+  ],
 
   /**
    * 오더 테이커의 에러 메세지입니다.
    * @readonly
-   */ static ERROR_MESSAGES = {
+   */ ERROR_MESSAGES: {
     invalidOrder: '유효하지 않은 주문입니다. 다시 입력해 주세요.',
-  };
-
-  static of() {
-    return new OrderTaker();
-  }
+  },
 
   /**
    * 주문을 받아 주문 내역을 반환합니다.
@@ -95,26 +92,26 @@ class OrderTaker {
    * @returns {OrderDetail} 주문 내역입니다.
    */
   takeOrder(name, quantity) {
-    const { foodName, price, foodCategory } = this.#findMenu(name);
+    const { foodName, price, foodCategory } = this.findMenu(name);
     const orderDetail = OrderDetail.of({ foodName, price, foodCategory, quantity });
 
     return orderDetail;
-  }
+  },
 
   /**
    * 메뉴판에서 메뉴를 찾아 반환합니다.
    * @param {string} name 메뉴의 이름입니다.
    * @returns {MenuInfo} 메뉴입니다.
    */
-  #findMenu(name) {
-    const result = this.#menu.find((food) => food.foodName === name);
+  findMenu(name) {
+    const result = this.menu.find((food) => food.foodName === name);
 
     if (!result) {
-      throw new ApplicationError(OrderTaker.ERROR_MESSAGES.invalidOrder);
+      throw new ApplicationError(this.ERROR_MESSAGES.invalidOrder);
     }
 
     return result;
-  }
-}
+  },
+});
 
 export default OrderTaker;

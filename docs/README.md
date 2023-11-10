@@ -229,6 +229,10 @@
   - [x] `getAllFoods` 호출 시 모든 `orderDetails`의 모든 `Food`를 반환한다.
   - [x] `getPrice` 호출 시 `ReceiptPriceInfo`를 반환한다.
 
+- [x] Receipt 예외 처리
+
+  - [x] 발행일자가 유효하지 않으면 에러가 발생한다.
+
 # 과제 진행 요구 사항
 
 # ✅ 최종 체크포인트

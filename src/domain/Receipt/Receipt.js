@@ -1,3 +1,5 @@
+import ApplicationError from '../../exceptions/ApplicationError.js';
+import { isInvalidDate } from '../../utils/validator/validator.js';
 import Food from '../Food/Food.js';
 import OrderDetail from '../OrderDetail/OrderDetail.js';
 import OrderTaker from '../OrderTaker/OrderTaker.js';
@@ -6,12 +8,45 @@ import OrderTaker from '../OrderTaker/OrderTaker.js';
 
 class Receipt {
   /**
+   * 영수증의 에러 메세지입니다.
+   * @readonly
+   */
+  static ERROR_MESSAGES = Object.freeze({
+    invalidDate: '유효하지 않은 날짜입니다. 다시 입력해 주세요.',
+  });
+
+  /**
+   * 영수증의 주문 내역입니다.
    * @type {OrderDetail}
    */
   #orderDetails = [];
 
-  static of() {
-    return new Receipt();
+  /**
+   * 영수증의 발행일자입니다.
+   * @type {Date}
+   */
+  #date;
+
+  /**
+   * @param {Date} date 발행일자입니다.
+   */
+  constructor(date) {
+    this.#validate(date);
+    this.#date = date;
+  }
+
+  /**
+   * @param {Date} date 발행일자입니다.
+   * @returns {Receipt} 영수증입니다.
+   */
+  static of(date) {
+    return new Receipt(date);
+  }
+
+  #validate(date) {
+    if (isInvalidDate(date)) {
+      throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidDate);
+    }
   }
 
   /**
@@ -20,9 +55,7 @@ class Receipt {
    * @param {number} quantity 주문한 메뉴의 갯수입니다.
    */
   order(name, quantity) {
-    const orderTaker = OrderTaker.of();
-    const orderDetail = orderTaker.takeOrder(name, quantity);
-
+    const orderDetail = OrderTaker.takeOrder(name, quantity);
     this.#orderDetails.push(orderDetail);
   }
 
