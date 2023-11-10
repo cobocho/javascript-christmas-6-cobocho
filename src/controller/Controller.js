@@ -1,5 +1,6 @@
 import InputView from '../InputView.js';
 import OutputView from '../OutputView.js';
+import SYSTEM from '../constants/system.js';
 import { Receipt } from '../domain/index.js';
 import { OrderService } from '../service/index.js';
 
@@ -57,9 +58,9 @@ class Controller {
   }
 
   async #readOrderMenus() {
-    const menus = (await this.#view.input.readOrderMenus()).split(',');
+    const menus = (await this.#view.input.readOrderMenus()).split(SYSTEM.menuSeparator);
     const orders = Array.from(menus, (menu) => {
-      const [name, quantity] = menu.split('-');
+      const [name, quantity] = menu.split(SYSTEM.priceSeparator);
       return { name, quantity: Number(quantity) };
     });
 
