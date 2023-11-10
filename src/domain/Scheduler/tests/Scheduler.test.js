@@ -1,4 +1,4 @@
-import Scheduler from './Scheduler.js';
+import Scheduler from '../Scheduler.js';
 
 describe('Scheduler 테스트', () => {
   let scheduler;
@@ -57,14 +57,11 @@ describe('Scheduler 테스트', () => {
     { year: 2023, month: 12, today: '2023-12-15' },
     { year: 2023, month: 10, today: '2023-10-31' },
     { year: 2021, month: 4, today: '2021-4-1' },
-  ])(
-    '`addEventMonth` 호출 시 해당 월을 이벤트 진행 일자에 추가한다.',
-    ({ year, month, today }) => {
-      // given & when
-      scheduler.addEventMonth(year, month);
+  ])('`addEventMonth` 호출 시 해당 월을 이벤트 진행 일자에 추가한다.', ({ year, month, today }) => {
+    // given & when
+    scheduler.addEventMonth(year, month);
 
-      // then
-      expect(scheduler.isEventDate(new Date(today))).toBeTruthy();
-    },
-  );
+    // then
+    expect(scheduler.isEventDate(new Date(today))).toBeTruthy();
+  });
 });

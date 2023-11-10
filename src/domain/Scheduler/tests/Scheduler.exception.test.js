@@ -1,4 +1,4 @@
-import Scheduler from './Scheduler.js';
+import Scheduler from '../Scheduler.js';
 
 const INVALID_DATES = [
   { invalidDate: '2023-13-01' },
