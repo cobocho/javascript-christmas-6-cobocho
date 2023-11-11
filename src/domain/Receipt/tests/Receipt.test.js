@@ -99,4 +99,17 @@ describe('Receipt 테스트', () => {
       }),
     ]);
   });
+
+  it('`receiveGiveaway` 호출 시 현재 총 주문금액에 따라 `orderDetails`에 가격이 음수인 `OrderDetail`이 추가된다.', () => {
+    // given
+    const receipt = Receipt.of(new Date());
+    receipt.orderMany([{ name: '티본스테이크', quantity: 3 }]);
+
+    // when
+    receipt.receiveGiveaway();
+    const [gift] = receipt.getGifts();
+
+    // then
+    expect(gift).toBeDefined();
+  });
 });
