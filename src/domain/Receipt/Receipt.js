@@ -108,6 +108,14 @@ class Receipt {
   }
 
   /**
+   * 영수증의 발행일자를 반환합니다.
+   * @returns {Date} 영수증의 발행일자입니다.
+   */
+  getDate() {
+    return this.#date;
+  }
+
+  /**
    * 영수증의 주문 내역을 반환합니다.
    * @returns {OrderDetail[]} 영수증의 모든 메뉴입니다.
    */

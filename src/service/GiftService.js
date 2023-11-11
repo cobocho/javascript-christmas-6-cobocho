@@ -1,4 +1,4 @@
-import { Receipt } from '../domain/index.js';
+import { Receipt, Scheduler } from '../domain/index.js';
 
 const GiftService = Object.freeze({
   /**
@@ -6,7 +6,11 @@ const GiftService = Object.freeze({
    * @param {Receipt} receipt - 증정품을 기록할 영수증입니다.
    */
   giveaway(receipt) {
-    receipt.receiveGiveaway();
+    const giftEventScheduler = Scheduler.of();
+    giftEventScheduler.addEventMonth(2023, 12);
+    if (giftEventScheduler.isEventDate(receipt.getDate())) {
+      receipt.receiveGiveaway();
+    }
   },
 });
 
