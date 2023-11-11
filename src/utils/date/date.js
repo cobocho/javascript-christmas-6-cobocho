@@ -50,3 +50,10 @@ export const isSameDate = (date1, date2) => {
 
   return sameYear && sameMonth && sameDate;
 };
+
+export const dateStringGenerator = ({ year, month, day }) => {
+  const parsedMonth = month >= 10 ? month : `0${month}`;
+  const parsedDay = day >= 10 ? day : `0${day}`;
+
+  return `${year}-${parsedMonth}-${parsedDay}`;
+};

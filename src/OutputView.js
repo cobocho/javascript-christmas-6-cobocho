@@ -56,6 +56,22 @@ const OutputView = Object.freeze({
   },
 
   /**
+   * 혜택내역을 출력합니다.
+   * @param {import('./service/DiscountService.js').BenefitResult[]} benefits - 혜택내역입니다.
+   */
+  benefits(benefits) {
+    this.print(MESSAGES.benefitTitle);
+    if (!benefits.length) {
+      this.print(MESSAGES.nothing);
+      return;
+    }
+    const benefitsList = benefits
+      .map(({ name, benefit }) => `${name}: -${benefit.toLocaleString()}${SYSTEM.currency}`)
+      .join('\n');
+    this.print(benefitsList);
+  },
+
+  /**
    * @param {string} message - 에러의 메세지입니다.
    * 에러를 출력합니다.
    */

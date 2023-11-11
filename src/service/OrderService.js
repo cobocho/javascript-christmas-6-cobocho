@@ -1,4 +1,6 @@
 import { Receipt } from '../domain/index.js';
+import SYSTEM from '../constants/system.js';
+import { dateStringGenerator } from '../utils/date/date.js';
 
 const OrderService = Object.freeze({
   /**
@@ -7,7 +9,7 @@ const OrderService = Object.freeze({
    * @returns {Receipt} 발행된 영수증입니다.
    */
   publishReceipt(date) {
-    const receiptDate = new Date(`2023-12-${date}`);
+    const receiptDate = new Date(dateStringGenerator({ ...SYSTEM.date, day: date }));
     return Receipt.of(receiptDate);
   },
 

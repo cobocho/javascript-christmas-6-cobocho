@@ -2,7 +2,7 @@ import InputView from '../InputView.js';
 import OutputView from '../OutputView.js';
 import SYSTEM from '../constants/system.js';
 import { Receipt } from '../domain/index.js';
-import { GiftService, OrderService } from '../service/index.js';
+import { GiftService, OrderService, DiscountService } from '../service/index.js';
 
 class Controller {
   /**
@@ -19,6 +19,7 @@ class Controller {
   #service = {
     order: OrderService,
     gift: GiftService,
+    discount: DiscountService,
   };
 
   /**
@@ -29,6 +30,8 @@ class Controller {
     const receipt = await this.#createReceipt();
     await this.#processOrder(receipt);
     this.#processGiveaway(receipt);
+    const dDayResult = this.#processDDayDiscount(receipt);
+    this.#printBenefits([dDayResult]);
   }
 
   /**
@@ -64,6 +67,14 @@ class Controller {
   async #processGiveaway(receipt) {
     this.#service.gift.giveaway(receipt);
     this.#printGifts(receipt);
+  }
+
+  /**
+   * 크리스마스 디데이 할인을 진행합니다.
+   * @param {Receipt} receipt - 할인을 적용할 영수증입니다.
+   */
+  #processDDayDiscount(receipt) {
+    return this.#service.discount.dDay(receipt);
   }
 
   /**
@@ -122,6 +133,14 @@ class Controller {
   #printGifts(receipt) {
     const gifts = Array.from(receipt.getGifts(), (gift) => gift.toString());
     this.#view.output.gifts(gifts);
+  }
+
+  /**
+   * 혜택 내역을 출력합니다.
+   * @param {BenefitResult[]} benefitResults - 출력할 혜택입니다.
+   */
+  #printBenefits(benefitResults) {
+    this.#view.output.benefits(benefitResults);
   }
 
   /**

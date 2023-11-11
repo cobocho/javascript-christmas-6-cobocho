@@ -15,13 +15,6 @@ class Discounter {
   _name;
 
   /**
-   * @param {string} name - 할인의 이름입니다.
-   */
-  constructor(name) {
-    this._name = name;
-  }
-
-  /**
    * 할인을 시작합니다.
    * @param {Receipt} receipt - 할인을 실행할 영수증입니다.
    */

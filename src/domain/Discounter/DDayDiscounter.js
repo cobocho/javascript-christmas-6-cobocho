@@ -37,7 +37,7 @@ class DDayDiscounter extends Discounter {
   static DISCOUNT_AMOUNT_PER_D_DAY = 100;
 
   static of() {
-    return new DDayDiscounter(DDayDiscounter.EVENT_NAME);
+    return new DDayDiscounter();
   }
 
   /**
@@ -48,12 +48,10 @@ class DDayDiscounter extends Discounter {
     if (!this.#isEventPeriod(receipt.getDate())) {
       return;
     }
-
     const visitDate = receipt.getDate().getTime();
     const dayDifference = Math.floor((visitDate - DDayDiscounter.D_DAY) / (1000 * 60 * 60 * 24));
     const reduction = DDayDiscounter.DISCOUNT_AMOUNT_PER_D_DAY * dayDifference;
     const discount = DDayDiscounter.MAX_DISCOUNT_AMOUNT + reduction;
-
     receipt.fillAdditionalDiscounts({
       name: this._name,
       discount,
