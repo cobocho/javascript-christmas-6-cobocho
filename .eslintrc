@@ -21,6 +21,12 @@
     // 메서드의 길이 제한
     "max-lines-per-function": ["error", { "max": 15 }],
 
+    // 과도한 개행을 방지하기 위한 침묵
+    "object-curly-newline": "off",
+
+    // protected 접근을 위한 침묵
+    "no-underscore-dangle": "off",
+
     "jsdoc/no-unused-vars": "off"
   },
   "overrides": [
