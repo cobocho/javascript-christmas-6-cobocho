@@ -28,6 +28,12 @@ class Receipt {
   #orderDetails = [];
 
   /**
+   * 영수증의 증정품 내역입니다.
+   * @type {OrderDetail}
+   */
+  #gifts = [];
+
+  /**
    * 영수증의 발행일자입니다.
    * @type {Date}
    */
@@ -96,12 +102,25 @@ class Receipt {
     this.#orderDetails.push(orderDetail);
   }
 
+  receiveGiveaway() {
+    const gifts = OrderTaker.giveaway(this.getPrice().cost);
+    this.#gifts.push(...gifts);
+  }
+
   /**
    * 영수증의 주문 내역을 반환합니다.
    * @returns {OrderDetail[]} 영수증의 모든 메뉴입니다.
    */
   getOrderDetails() {
     return this.#orderDetails;
+  }
+
+  /**
+   * 영수증의 증정 내역을 반환합니다.
+   * @returns {OrderDetail[]} 영수증의 모든 메뉴입니다.
+   */
+  getGifts() {
+    return this.#gifts;
   }
 
   /**

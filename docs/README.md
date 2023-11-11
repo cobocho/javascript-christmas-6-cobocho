@@ -253,9 +253,9 @@
 
   - [x] `giveaway` 호출 시 총 가격에 따라 가격이 음수인 `OrderDetail` 리스트를 반환한다.
 
-- [ ] Receipt
+- [x] Receipt
 
-  - [ ] `receiveGiveaway` 호출 시 현재 총 주문금액에 따라 `orderDetails`에 가격이 음수인 `OrderDetail`이 추가된다.
+  - [x] `receiveGiveaway` 호출 시 현재 총 주문금액에 따라 `orderDetails`에 가격이 음수인 `OrderDetail`이 추가된다.
 
 # 기획팀 요구사항 다시 돌아보기
 
