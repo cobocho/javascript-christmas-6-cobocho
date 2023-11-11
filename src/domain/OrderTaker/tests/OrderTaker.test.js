@@ -27,4 +27,16 @@ describe('OrderTaker 테스트', () => {
       result.getFoods().forEach((food) => expect(food).toBeInstanceOf(category));
     },
   );
+
+  it.each([{ cost: 120_000 }])(
+    '`giveaway` 호출 시 12만원 이상이면 샴페인 1개를 반환한다.',
+    ({ cost }) => {
+      // given & when
+      const result = OrderTaker.giveaway(cost);
+
+      // then
+      expect(result[0].toString()).toBe('샴페인 1개');
+      expect(result[0].getPrice().cost).toBe(-25_000);
+    },
+  );
 });
