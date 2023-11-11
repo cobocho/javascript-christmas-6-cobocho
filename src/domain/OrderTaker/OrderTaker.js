@@ -78,6 +78,14 @@ const OrderTaker = Object.freeze({
     },
   ],
 
+  gifts: [
+    {
+      minimumCost: 120_000,
+      giftName: '샴페인',
+      quantity: 1,
+    },
+  ],
+
   /**
    * 오더 테이커의 에러 메세지입니다.
    * @readonly
@@ -87,7 +95,7 @@ const OrderTaker = Object.freeze({
 
   /**
    * 주문을 받아 주문 내역을 반환합니다.
-   * @param {string} name 주문한 메뉴의 s.
+   * @param {string} name 주문한 메뉴의 이름입니다.
    * @param {number} quantity 주문한 메뉴의 갯수입니다.
    * @returns {OrderDetail} 주문 내역입니다.
    */
@@ -101,6 +109,19 @@ const OrderTaker = Object.freeze({
     const orderDetail = OrderDetail.of({ foodName, price, foodCategory, quantity });
 
     return orderDetail;
+  },
+
+  /**
+   * 총 주문 금액에 따른 증정품을 반환합니다.
+   * @param {number} costPrice
+   * @returns {OrderDetail[]} 증정품 목록입니다.
+   */
+  giveaway(costPrice) {
+    const gifts = this.gifts.filter((giveaway) => giveaway.minimumCost <= costPrice);
+    return Array.from(gifts, ({ giftName }) => {
+      const { foodName, foodCategory, price } = this.findMenu(giftName);
+      return OrderDetail.of({ foodName, price: -price, foodCategory, quantity: 1 });
+    });
   },
 
   /**

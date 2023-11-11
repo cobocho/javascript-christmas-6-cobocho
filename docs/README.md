@@ -249,9 +249,9 @@
 
 ## 도메인 구현
 
-- [ ] OrderTaker
+- [x] OrderTaker
 
-  - [ ] `giveaway` 호출 시 총 가격에 따라 가격이 음수인 `OrderDetail` 리스트를 반환한다.
+  - [x] `giveaway` 호출 시 총 가격에 따라 가격이 음수인 `OrderDetail` 리스트를 반환한다.
 
 - [ ] Receipt
 
