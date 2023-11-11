@@ -5,6 +5,12 @@ import Food from '../Food/Food.js';
 import OrderDetail from '../OrderDetail/OrderDetail.js';
 import OrderTaker from '../OrderTaker/OrderTaker.js';
 
+/**
+ * @typedef AdditionalDiscounts 음식 외 할인 내역입니다.
+ * @property {string} name - 할인명입니다.
+ * @property {number} discount - 할인액입니다.
+ */
+
 class Receipt {
   /**
    * 영수증의 에러 메세지입니다.
@@ -23,15 +29,21 @@ class Receipt {
 
   /**
    * 영수증의 주문 내역입니다.
-   * @type {OrderDetail}
+   * @type {OrderDetail[]}
    */
   #orderDetails = [];
 
   /**
    * 영수증의 증정품 내역입니다.
-   * @type {OrderDetail}
+   * @type {OrderDetail[]}
    */
   #gifts = [];
+
+  /**
+   * 음식 외 할인 내역입니다.
+   * @type {AdditionalDiscounts[]}
+   */
+  #additionalDiscounts = [];
 
   /**
    * 영수증의 발행일자입니다.
@@ -62,7 +74,7 @@ class Receipt {
   }
 
   /**
-   * 주문을 한번에 여러개를 반영합니다.
+   * 주문내역을 반영합니다.
    * @param {{ name: string, quantity: number }[]} orders 주문한 메뉴 내역들입니다.
    */
   orderMany(orders) {
@@ -102,9 +114,20 @@ class Receipt {
     this.#orderDetails.push(orderDetail);
   }
 
+  /**
+   * 현재 결제 금액에 따른 증정품을 받습니다.
+   */
   receiveGiveaway() {
     const gifts = OrderTaker.giveaway(this.getPrice().cost);
     this.#gifts.push(...gifts);
+  }
+
+  /**
+   * 식품 외 추가 할인 내역을 등록합니다.
+   * @param {AdditionalDiscounts} additionalDiscount - 식품 외 추가 할인 내역입니다.
+   */
+  fillAdditionalDiscounts(additionalDiscount) {
+    this.#additionalDiscounts.push(additionalDiscount);
   }
 
   /**
@@ -131,6 +154,10 @@ class Receipt {
     return this.#gifts;
   }
 
+  getAdditionalDiscount() {
+    return this.#additionalDiscounts;
+  }
+
   /**
    * 영수증의 모든 메뉴를 반환합니다.
    * @returns {Food[]} 영수증의 모든 메뉴입니다.
@@ -151,8 +178,25 @@ class Receipt {
         benefit: priceInfo.benefit,
         payment: priceInfo.payment + orderDetail.getPrice().payment,
       }),
-      { cost: 0, discount: 0, benefit: 0, payment: 0 },
+      this.#generateDefaultPriceInfo(),
     );
+  }
+
+  #generateDefaultPriceInfo() {
+    return {
+      cost: 0,
+      discount: this.#getTotalAdditionalDiscount(),
+      benefit: this.#getTotalGiftsPrice(),
+      payment: 0,
+    };
+  }
+
+  #getTotalGiftsPrice() {
+    return this.#gifts.reduce((benefit, gift) => benefit + gift.getPrice().cost, 0);
+  }
+
+  #getTotalAdditionalDiscount() {
+    return this.#additionalDiscounts.reduce((total, { discount }) => total + discount, 0);
   }
 }
 
