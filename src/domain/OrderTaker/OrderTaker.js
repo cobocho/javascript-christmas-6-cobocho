@@ -120,7 +120,7 @@ const OrderTaker = Object.freeze({
     const gifts = this.gifts.filter((giveaway) => giveaway.minimumCost <= costPrice);
     return Array.from(gifts, ({ giftName }) => {
       const { foodName, foodCategory, price } = this.findMenu(giftName);
-      return OrderDetail.of({ foodName, price: -price, foodCategory, quantity: 1 });
+      return OrderDetail.of({ foodName, price, foodCategory, quantity: 1 });
     });
   },
 

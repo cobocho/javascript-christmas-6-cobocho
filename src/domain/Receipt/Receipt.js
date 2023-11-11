@@ -175,7 +175,7 @@ class Receipt {
       (priceInfo, orderDetail) => ({
         cost: priceInfo.cost + orderDetail.getPrice().cost,
         discount: priceInfo.discount,
-        benefit: priceInfo.benefit,
+        benefit: priceInfo.benefit + orderDetail.getPrice().discount,
         payment: priceInfo.payment + orderDetail.getPrice().payment,
       }),
       this.#generateDefaultPriceInfo(),
@@ -185,9 +185,9 @@ class Receipt {
   #generateDefaultPriceInfo() {
     return {
       cost: 0,
-      discount: this.#getTotalAdditionalDiscount(),
-      benefit: this.#getTotalGiftsPrice(),
-      payment: 0,
+      discount: this.#getDefaultDiscount(),
+      benefit: this.#getDefaultDiscount() + this.#getTotalGiftsPrice(),
+      payment: this.#getDefaultDiscount(),
     };
   }
 
@@ -195,7 +195,7 @@ class Receipt {
     return this.#gifts.reduce((benefit, gift) => benefit + gift.getPrice().cost, 0);
   }
 
-  #getTotalAdditionalDiscount() {
+  #getDefaultDiscount() {
     return this.#additionalDiscounts.reduce((total, { discount }) => total + discount, 0);
   }
 }

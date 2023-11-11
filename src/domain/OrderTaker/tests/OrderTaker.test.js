@@ -36,7 +36,7 @@ describe('OrderTaker 테스트', () => {
 
       // then
       expect(result[0].toString()).toBe('샴페인 1개');
-      expect(result[0].getPrice().cost).toBe(-25_000);
+      expect(result[0].getPrice().cost).toBe(25_000);
     },
   );
 });

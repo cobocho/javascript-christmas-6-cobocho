@@ -121,5 +121,6 @@ describe('Receipt 테스트', () => {
 
     // then
     expect(gift).toBeDefined();
+    expect(receipt.getPrice().benefit).toBe(25_000);
   });
 });
