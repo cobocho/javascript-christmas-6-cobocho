@@ -2,7 +2,7 @@ import InputView from '../InputView.js';
 import OutputView from '../OutputView.js';
 import SYSTEM from '../constants/system.js';
 import { Receipt } from '../domain/index.js';
-import { OrderService } from '../service/index.js';
+import { GiftService, OrderService } from '../service/index.js';
 
 class Controller {
   /**
@@ -18,13 +18,17 @@ class Controller {
    */
   #service = {
     order: OrderService,
+    gift: GiftService,
   };
 
+  /**
+   * 할인 계산 프로그램을 시작합니다.
+   */
   async start() {
     this.#printStartComment();
     const receipt = await this.#createReceipt();
     await this.#processOrder(receipt);
-    this.#printCostPrice(receipt);
+    this.#processGiveaway(receipt);
   }
 
   /**
@@ -50,13 +54,31 @@ class Controller {
       this.#service.order.orderFoods(receipt, orders);
     });
     this.#printOrders(receipt);
+    this.#printCostPrice(receipt);
   }
 
+  /**
+   * 증정품을 부여합니다.
+   * @param {Receipt} receipt - 증정품을 기록할 영수증입니다.
+   */
+  async #processGiveaway(receipt) {
+    this.#service.gift.giveaway(receipt);
+    this.#printGifts(receipt);
+  }
+
+  /**
+   * 방문일을 입력받습니다.
+   * @returns {Promise<string | null>} 방문일입니다.
+   */
   async #readVisitDate() {
     const date = await this.#view.input.readVisitDate();
     return date;
   }
 
+  /**
+   * 주문할 메뉴를 입력받습니다.
+   * @returns {Promise<{name: string, quantity: number}[]>} 주문 메뉴 목록입니다.
+   */
   async #readOrderMenus() {
     const menus = (await this.#view.input.readOrderMenus()).split(SYSTEM.menuSeparator);
     const orders = Array.from(menus, (menu) => {
@@ -67,6 +89,9 @@ class Controller {
     return orders;
   }
 
+  /**
+   * 시작 문구를 출력합니다.
+   */
   #printStartComment() {
     this.#view.output.startComment();
   }
@@ -88,6 +113,15 @@ class Controller {
   #printCostPrice(receipt) {
     const { cost } = receipt.getPrice();
     this.#view.output.costPrice(cost);
+  }
+
+  /**
+   * 증정 내역을 출력합니다.
+   * @param {Receipt} receipt - 출력할 영수증입니다.
+   */
+  #printGifts(receipt) {
+    const gifts = Array.from(receipt.getGifts(), (gift) => gift.toString());
+    this.#view.output.gifts(gifts);
   }
 
   /**

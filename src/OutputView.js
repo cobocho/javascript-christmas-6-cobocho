@@ -37,6 +37,16 @@ const OutputView = Object.freeze({
   },
 
   /**
+   * 증정 메뉴를 출력합니다.
+   * @param {string[]} gifts - 증정 메뉴입니다.
+   */
+  gifts(gifts) {
+    this.print(MESSAGES.giftTitle);
+    const giftsList = gifts.length ? gifts.join('\n') : MESSAGES.nothing;
+    this.print(giftsList);
+  },
+
+  /**
    * 할인 전 총 주문금액을 출력합니다.
    * @param {number} cost - 할인 전 총 주문금액입니다.
    */
