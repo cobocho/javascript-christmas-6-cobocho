@@ -17,12 +17,13 @@ class Discounter {
   /**
    * 할인을 시작합니다.
    * @param {Receipt} receipt - 할인을 실행할 영수증입니다.
+   * @returns {import('../../service/DiscountService.js').BenefitResult | null} 할인 결과입니다.
    */
   run(receipt) {
     if (!this.#isMeetRequirement(receipt)) {
-      return;
+      return null;
     }
-    this._discount(receipt);
+    return this._discount(receipt);
   }
 
   /**
@@ -38,6 +39,7 @@ class Discounter {
    * 할인을 적용합니다.
    * @abstract
    * @protected
+   * @returns {import('../../service/DiscountService.js').BenefitResult | null} 할인 결과입니다.
    * @param {Receipt} receipt - 할인을 적용할 영수증입니다.
    */
   // 추상 메서드를 위한 eslint off

@@ -139,7 +139,7 @@ class Controller {
 
   /**
    * 혜택 내역을 출력합니다.
-   * @param {Array<BenefitResult>} benefitResults - 출력할 혜택입니다.
+   * @param {BenefitResult[] | []} benefitResults - 출력할 혜택입니다.
    */
   #printBenefits(benefitResults) {
     this.#view.output.benefits(benefitResults);

@@ -44,16 +44,20 @@ class DDayDiscounter extends Discounter {
   /**
    * 할인을 적용합니다.
    * @param {Receipt} receipt - 할인을 적용할 영수증입니다.
+   * @returns {import('../../service/DiscountService.js').BenefitResult | null} 할인 결과입니다.
    */
   _discount(receipt) {
     if (!this.#isEventPeriod(receipt.getDate())) {
-      return;
+      return null;
     }
+
     const visitDate = receipt.getDate().getTime();
     const dayDifference = Math.floor((visitDate - DDayDiscounter.D_DAY) / (1000 * 60 * 60 * 24));
     const reduction = DDayDiscounter.DISCOUNT_AMOUNT_PER_D_DAY * dayDifference;
     const discount = DDayDiscounter.MAX_DISCOUNT_AMOUNT + reduction;
     receipt.addAdditionalDiscount(AdditionalDiscount.of(DDayDiscounter.EVENT_NAME, discount));
+
+    return { name: DDayDiscounter.EVENT_NAME, benefit: discount };
   }
 
   /**
