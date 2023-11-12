@@ -57,3 +57,13 @@ export const dateStringGenerator = ({ year, month, day }) => {
 
   return `${year}-${parsedMonth}-${parsedDay}`;
 };
+
+/**
+ * 입력된 Date가 평일인지 확인합니다.
+ * @param {Date} date 확인할 날짜입니다.
+ * @returns {boolean} 날짜의 평일 여부입니다.
+ */
+export const isWeekday = (date) => {
+  const dayOfWeek = date.getDay();
+  return dayOfWeek >= 0 && dayOfWeek <= 4;
+};
