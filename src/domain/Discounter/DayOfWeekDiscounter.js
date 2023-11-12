@@ -1,4 +1,5 @@
 import { isWeekday } from '../../utils/date/date.js';
+import Dessert from '../Food/Dessert.js';
 import MainCourse from '../Food/MainCourse.js';
 import Receipt from '../Receipt/Receipt.js';
 import Scheduler from '../Scheduler/Scheduler.js';
@@ -16,6 +17,12 @@ class DayOfWeekDiscounter extends Discounter {
    * @readonly
    */
   static WEEKEND_EVENT_NAME = '주말 할인';
+
+  /**
+   * 평일 할인 대상 카테고리입니다.
+   * @readonly
+   */
+  static WEEKDAY_EVENT_CATEGORY = Dessert;
 
   /**
    * 주말 할인 대상 카테고리입니다.
@@ -48,28 +55,45 @@ class DayOfWeekDiscounter extends Discounter {
    * @returns {import('../../service/DiscountService.js').BenefitResult | null} 할인 결과입니다.
    */
   _discount(receipt) {
-    if (!this.#isEventPeriod(receipt.getDate())) {
+    const visitDate = receipt.getDate();
+    if (!this.#isEventPeriod(visitDate)) {
+      return null;
+    }
+    const { name, category } = this.#getDiscountInfo(isWeekday(visitDate));
+
+    return this.#discountEventFoods({ name, category, receipt });
+  }
+
+  #discountEventFoods({ name, category, receipt }) {
+    const beforeDiscountPrice = receipt.getPrice().discount;
+    const foods = receipt.getAllFoods().filter((food) => food instanceof category);
+    foods.forEach((food) => food.discount(DayOfWeekDiscounter.DISCOUNT_PER_FOOD));
+    const benefit = beforeDiscountPrice - receipt.getPrice().discount;
+
+    if (!benefit) {
       return null;
     }
 
-    return isWeekday(receipt.getDate()) ? null : this.#weekendDiscount(receipt);
+    return {
+      name,
+      benefit,
+    };
   }
 
   /**
-   * 주말 할인을 적용합니다.
-   * @param {Receipt} receipt - 할인을 적용할 영수증입니다.
-   * @returns {import('../../service/DiscountService.js').BenefitResult | null} 할인 결과입니다.
+   * 요일에 따른 할인 조건을 반환합니다.
+   * @param {boolean} weekday - 평일 여부입니다.
+   * @returns {{ name: string, category: Function }} - 할인 조건입니다.
    */
-  #weekendDiscount(receipt) {
-    const beforeDiscountPrice = receipt.getPrice().discount;
-    const foods = receipt
-      .getAllFoods()
-      .filter((food) => food instanceof DayOfWeekDiscounter.WEEKEND_EVENT_CATEGORY);
-    foods.forEach((food) => food.discount(DayOfWeekDiscounter.DISCOUNT_PER_FOOD));
-    return {
-      name: DayOfWeekDiscounter.WEEKEND_EVENT_NAME,
-      benefit: beforeDiscountPrice - receipt.getPrice().discount,
-    };
+  #getDiscountInfo(weekday) {
+    const category = weekday
+      ? DayOfWeekDiscounter.WEEKDAY_EVENT_CATEGORY
+      : DayOfWeekDiscounter.WEEKEND_EVENT_CATEGORY;
+    const name = weekday
+      ? DayOfWeekDiscounter.WEEKDAY_EVENT_NAME
+      : DayOfWeekDiscounter.WEEKEND_EVENT_NAME;
+
+    return { name, category };
   }
 
   /**
