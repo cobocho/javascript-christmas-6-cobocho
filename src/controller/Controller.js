@@ -4,6 +4,10 @@ import SYSTEM from '../constants/system.js';
 import { Receipt } from '../domain/index.js';
 import { GiftService, OrderService, DiscountService } from '../service/index.js';
 
+/**
+ * @typedef {import('../service/DiscountService.js').BenefitResult} BenefitResult
+ */
+
 class Controller {
   /**
    * 입출력을 담당하는 View입니다.
@@ -29,9 +33,9 @@ class Controller {
     this.#printStartComment();
     const receipt = await this.#createReceipt();
     await this.#processOrder(receipt);
-    this.#processGiveaway(receipt);
+    const giftResult = this.#processGiveaway(receipt);
     const dDayResult = this.#processDDayDiscount(receipt);
-    const benefits = [dDayResult].filter((benefit) => benefit);
+    const benefits = [dDayResult, giftResult].filter((benefit) => benefit);
     this.#printBenefits(benefits);
   }
 
@@ -64,16 +68,18 @@ class Controller {
   /**
    * 증정품을 부여합니다.
    * @param {Receipt} receipt - 증정품을 기록할 영수증입니다.
+   * @returns {BenefitResult | null} - 증정 결과입니다.
    */
-  async #processGiveaway(receipt) {
-    this.#service.gift.giveaway(receipt);
+  #processGiveaway(receipt) {
+    const giftResult = this.#service.gift.giveaway(receipt);
     this.#printGifts(receipt);
+    return giftResult;
   }
 
   /**
    * 크리스마스 디데이 할인을 진행합니다.
    * @param {Receipt} receipt - 할인을 적용할 영수증입니다.
-   * @returns {import('../service/DiscountService.js').BenefitResult | null} - 할인 결과입니다.
+   * @returns {BenefitResult | null} - 할인 결과입니다.
    */
   #processDDayDiscount(receipt) {
     return this.#service.discount.dDay(receipt);

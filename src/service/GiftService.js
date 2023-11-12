@@ -2,6 +2,12 @@ import { Receipt, Scheduler } from '../domain/index.js';
 
 const GiftService = Object.freeze({
   /**
+   * 증정 이벤트의 이름입니다.
+   * @readonly
+   */
+  EVENT_NAME: '증정 이벤트',
+
+  /**
    * 증정 이벤트의 기간입니다.
    * @readonly
    */
@@ -13,6 +19,7 @@ const GiftService = Object.freeze({
   /**
    * 총 가격에 따라 증정품을 부여합니다.
    * @param {Receipt} receipt - 증정품을 기록할 영수증입니다.
+   * @returns {import('./DiscountService.js').BenefitResult | null} - 증정 결과입니다.
    */
   giveaway(receipt) {
     const giftEventScheduler = Scheduler.of();
@@ -20,6 +27,9 @@ const GiftService = Object.freeze({
     if (giftEventScheduler.isEventDate(receipt.getDate())) {
       receipt.receiveGiveaway();
     }
+    const gifts = receipt.getGifts();
+    const benefit = gifts.reduce((discounts, gift) => discounts + gift.getPrice().cost, 0);
+    return gifts.length > 0 ? { name: GiftService.EVENT_NAME, benefit } : null;
   },
 });
 
