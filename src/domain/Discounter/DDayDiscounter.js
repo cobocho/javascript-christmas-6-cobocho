@@ -1,3 +1,4 @@
+import AdditionalDiscount from '../AdditionalDiscount/AdditionalDiscount.js';
 import Receipt from '../Receipt/Receipt.js';
 import Scheduler from '../Scheduler/Scheduler.js';
 import Discounter from './Discounter.js';
@@ -52,10 +53,7 @@ class DDayDiscounter extends Discounter {
     const dayDifference = Math.floor((visitDate - DDayDiscounter.D_DAY) / (1000 * 60 * 60 * 24));
     const reduction = DDayDiscounter.DISCOUNT_AMOUNT_PER_D_DAY * dayDifference;
     const discount = DDayDiscounter.MAX_DISCOUNT_AMOUNT + reduction;
-    receipt.fillAdditionalDiscounts({
-      name: this._name,
-      discount,
-    });
+    receipt.addAdditionalDiscount(AdditionalDiscount.of(DDayDiscounter.EVENT_NAME, discount));
   }
 
   /**

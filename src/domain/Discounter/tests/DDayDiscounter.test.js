@@ -1,3 +1,4 @@
+import AdditionalDiscount from '../../AdditionalDiscount/AdditionalDiscount.js';
 import Receipt from '../../Receipt/Receipt.js';
 import DDayDiscounter from '../DDayDiscounter.js';
 
@@ -23,7 +24,9 @@ describe('DDayDiscounter 테스트', () => {
     dDayDiscounter.run(receipt);
 
     // then
-    expect(receipt.getAdditionalDiscount()).toEqual([{ name: '크리스마스 디데이 할인', discount }]);
+    expect(receipt.getAdditionalDiscounts()).toEqual([
+      AdditionalDiscount.of(DDayDiscounter.EVENT_NAME, discount),
+    ]);
     expect(receipt.getPrice().cost).toBe(55_000);
     expect(receipt.getPrice().discount).toBe(discount);
   });
@@ -39,7 +42,7 @@ describe('DDayDiscounter 테스트', () => {
       dDayDiscounter.run(receipt);
 
       // then
-      expect(receipt.getAdditionalDiscount()).toHaveLength(0);
+      expect(receipt.getAdditionalDiscounts()).toHaveLength(0);
     },
   );
 });

@@ -31,7 +31,8 @@ class Controller {
     await this.#processOrder(receipt);
     this.#processGiveaway(receipt);
     const dDayResult = this.#processDDayDiscount(receipt);
-    this.#printBenefits([dDayResult]);
+    const benefits = [dDayResult].filter((benefit) => benefit);
+    this.#printBenefits(benefits);
   }
 
   /**
@@ -72,6 +73,7 @@ class Controller {
   /**
    * 크리스마스 디데이 할인을 진행합니다.
    * @param {Receipt} receipt - 할인을 적용할 영수증입니다.
+   * @returns {import('../service/DiscountService.js').BenefitResult | null} - 할인 결과입니다.
    */
   #processDDayDiscount(receipt) {
     return this.#service.discount.dDay(receipt);
@@ -137,7 +139,7 @@ class Controller {
 
   /**
    * 혜택 내역을 출력합니다.
-   * @param {BenefitResult[]} benefitResults - 출력할 혜택입니다.
+   * @param {Array<BenefitResult>} benefitResults - 출력할 혜택입니다.
    */
   #printBenefits(benefitResults) {
     this.#view.output.benefits(benefitResults);

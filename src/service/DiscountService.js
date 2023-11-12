@@ -16,13 +16,15 @@ const DiscountService = Object.freeze({
   dDay(receipt) {
     const discounter = DDayDiscounter.of();
     discounter.run(receipt);
-
-    return {
-      name: DDayDiscounter.EVENT_NAME,
-      benefit: receipt
-        .getAdditionalDiscount()
-        .find(({ name }) => name === DDayDiscounter.EVENT_NAME).discount,
-    };
+    const discountDetail = receipt
+      .getAdditionalDiscounts()
+      .find((additional) => additional.getName() === DDayDiscounter.EVENT_NAME);
+    return discountDetail
+      ? {
+          name: discountDetail.getName(),
+          benefit: discountDetail.getDiscount(),
+        }
+      : null;
   },
 });
 
