@@ -169,8 +169,8 @@ class Receipt {
     return this.#orderDetails.reduce(
       (priceInfo, orderDetail) => ({
         cost: priceInfo.cost + orderDetail.getPrice().cost,
-        discount: priceInfo.discount,
-        benefit: priceInfo.benefit + orderDetail.getPrice().discount,
+        discount: priceInfo.discount - orderDetail.getPrice().discount,
+        benefit: priceInfo.benefit - orderDetail.getPrice().discount,
         payment: priceInfo.payment + orderDetail.getPrice().payment,
       }),
       this.#generateDefaultPriceInfo(),
