@@ -1,4 +1,4 @@
-import { DDayDiscounter } from '../domain/Discounter/index.js';
+import { DDayDiscounter, DayOfWeekDiscounter } from '../domain/Discounter/index.js';
 import { Receipt } from '../domain/index.js';
 
 /**
@@ -15,6 +15,17 @@ const DiscountService = Object.freeze({
    */
   dDay(receipt) {
     const discounter = DDayDiscounter.of();
+    const result = discounter.run(receipt);
+    return result;
+  },
+
+  /**
+   * 요일 할인을 진행합니다.
+   * @param {Receipt} receipt - 할인을 적용할 영수증입니다.
+   * @returns {BenefitResult | null} - 할인 결과입니다.
+   */
+  dayOfWeek(receipt) {
+    const discounter = DayOfWeekDiscounter.of();
     const result = discounter.run(receipt);
     return result;
   },
