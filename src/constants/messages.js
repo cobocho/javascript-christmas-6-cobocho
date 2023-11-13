@@ -4,6 +4,7 @@ const MESSAGES = Object.freeze({
   orderTitle: '\n<주문 메뉴>',
   costTitle: '\n<할인 전 총주문 금액>',
   giftTitle: '\n<증정 메뉴>',
+  benefitAmountTitle: '\n<총혜택 금액>',
   benefitTitle: '\n<혜택 내역>',
   nothing: '없음',
 });

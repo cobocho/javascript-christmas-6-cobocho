@@ -72,6 +72,15 @@ const OutputView = Object.freeze({
   },
 
   /**
+   * 총혜택 금액을 출력합니다.
+   * @param {number} benefitAmount - 총혜택 금액입니다.
+   */
+  benefitAmount(benefitAmount) {
+    this.print(MESSAGES.benefitAmountTitle);
+    this.print(`-${benefitAmount.toLocaleString()}원`);
+  },
+
+  /**
    * @param {string} message - 에러의 메세지입니다.
    * 에러를 출력합니다.
    */

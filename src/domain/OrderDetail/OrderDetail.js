@@ -63,7 +63,7 @@ class OrderDetail {
         const { cost, discount, payment } = food.getPrice();
         return {
           cost: price.cost + cost,
-          discount: price.discount + discount,
+          discount: price.discount - discount,
           payment: price.payment + payment,
         };
       },

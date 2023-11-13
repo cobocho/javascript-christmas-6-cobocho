@@ -37,10 +37,9 @@ class Controller {
     const dDayResult = this.#processDDayDiscount(receipt);
     const dayOfWeekResult = this.#processDayOfWeekDiscount(receipt);
     const specialResult = this.#processSpecialDiscount(receipt);
-    const benefits = [dDayResult, dayOfWeekResult, giftResult, specialResult].filter(
-      (benefit) => benefit,
-    );
+    const benefits = [dDayResult, dayOfWeekResult, specialResult, giftResult].filter(Boolean);
     this.#printBenefits(benefits);
+    this.#printBenefitAmount(receipt);
   }
 
   /**
@@ -171,6 +170,15 @@ class Controller {
    */
   #printBenefits(benefitResults) {
     this.#view.output.benefits(benefitResults);
+  }
+
+  /**
+   * 총혜택금액을 출력합니다.
+   * @param {Receipt} receipt - 출력할 영수증입니다.
+   */
+  #printBenefitAmount(receipt) {
+    const benefitAmount = receipt.getPrice().benefit;
+    this.#view.output.benefitAmount(benefitAmount);
   }
 
   /**
