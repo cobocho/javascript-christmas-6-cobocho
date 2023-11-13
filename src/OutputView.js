@@ -81,6 +81,15 @@ const OutputView = Object.freeze({
   },
 
   /**
+   * 할인 후 예상 결제 금액을 출력합니다.
+   * @param {number} paymentAmount - 할인 후 예상 결제 금액입니다.
+   */
+  paymentAmount(paymentAmount) {
+    this.print(MESSAGES.paymentAmountTitle);
+    this.print(`${paymentAmount.toLocaleString()}원`);
+  },
+
+  /**
    * @param {string} message - 에러의 메세지입니다.
    * 에러를 출력합니다.
    */

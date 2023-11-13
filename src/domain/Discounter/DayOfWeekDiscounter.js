@@ -68,7 +68,7 @@ class DayOfWeekDiscounter extends Discounter {
     const beforeDiscountPrice = receipt.getPrice().discount;
     const foods = receipt.getAllFoods().filter((food) => food instanceof category);
     foods.forEach((food) => food.discount(DayOfWeekDiscounter.DISCOUNT_PER_FOOD));
-    const benefit = beforeDiscountPrice - receipt.getPrice().discount;
+    const benefit = receipt.getPrice().discount - beforeDiscountPrice;
 
     if (!benefit) {
       return null;

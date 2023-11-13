@@ -36,7 +36,7 @@ class Receipt {
 
   /**
    * 음식 외 할인 내역입니다.
-   * @type {AdditionalDiscounts[]}
+   * @type {AdditionalDiscount[]}
    */
   #additionalDiscounts = [];
 
@@ -169,8 +169,8 @@ class Receipt {
     return this.#orderDetails.reduce(
       (priceInfo, orderDetail) => ({
         cost: priceInfo.cost + orderDetail.getPrice().cost,
-        discount: priceInfo.discount - orderDetail.getPrice().discount,
-        benefit: priceInfo.benefit - orderDetail.getPrice().discount,
+        discount: priceInfo.discount + orderDetail.getPrice().discount,
+        benefit: priceInfo.benefit + orderDetail.getPrice().discount,
         payment: priceInfo.payment + orderDetail.getPrice().payment,
       }),
       this.#generateDefaultPriceInfo(),
@@ -182,7 +182,7 @@ class Receipt {
       cost: 0,
       discount: this.#getDefaultDiscount(),
       benefit: this.#getDefaultDiscount() + this.#getTotalGiftsPrice(),
-      payment: this.#getDefaultDiscount(),
+      payment: -this.#getDefaultDiscount(),
     };
   }
 
