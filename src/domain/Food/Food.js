@@ -1,3 +1,7 @@
+/**
+ * @typedef {import("../../types/price").PriceInfo} PriceInfo
+ */
+
 class Food {
   /**
    * 음식의 이름입니다.
@@ -7,7 +11,7 @@ class Food {
 
   /**
    * 음식의 가격입니다.
-   * @type {import("../../types/price").PriceInfo}
+   * @type {PriceInfo}
    */
   #price = {
     cost: 0,
@@ -16,8 +20,8 @@ class Food {
   };
 
   /**
-   * @param {string} name
-   * @param {number} price
+   * @param {string} name - 음식의 이름입니다.
+   * @param {number} price - 음식의 가격입니다.
    */
   constructor(name, price) {
     this.#name = name;
@@ -26,14 +30,26 @@ class Food {
   }
 
   /**
-   * @param {string} name
-   * @param {number} price
-   * @returns {Food}
+   * @param {string} name - 음식의 이름입니다.
+   * @param {number} price - 음식의 가격입니다.
+   * @returns {Food} 생성된 음식입니다.
    */
   static of(name, price) {
     return new Food(name, price);
   }
 
+  /**
+   * 음식의 이름을 반환합니다.
+   * @returns {string} - 음식의 이름입니다.
+   */
+  getName() {
+    return this.#name;
+  }
+
+  /**
+   * 음식의 가격을 반환합니다.
+   * @returns {PriceInfo} - 음식의 가격입니다.
+   */
   getPrice() {
     return this.#price;
   }
