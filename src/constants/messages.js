@@ -7,6 +7,7 @@ const MESSAGES = Object.freeze({
   benefitAmountTitle: '\n<총혜택 금액>',
   paymentAmountTitle: '\n<할인 후 예상 결제 금액>',
   benefitTitle: '\n<혜택 내역>',
+  badgeTitle: '\n<12월 이벤트 배지>',
   nothing: '없음',
 });
 

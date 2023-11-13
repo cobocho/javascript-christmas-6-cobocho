@@ -90,6 +90,15 @@ const OutputView = Object.freeze({
   },
 
   /**
+   * 배지를 출력합니다.
+   * @param {string} badge - 배지의 이름입니다.
+   */
+  badge(badge) {
+    this.print(MESSAGES.badgeTitle);
+    this.print(badge ?? MESSAGES.nothing);
+  },
+
+  /**
    * @param {string} message - 에러의 메세지입니다.
    * 에러를 출력합니다.
    */

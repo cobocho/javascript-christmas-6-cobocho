@@ -1,8 +1,8 @@
 import InputView from '../InputView.js';
 import OutputView from '../OutputView.js';
 import SYSTEM from '../constants/system.js';
-import { Receipt } from '../domain/index.js';
-import { GiftService, OrderService, DiscountService } from '../service/index.js';
+import { Badge, Receipt } from '../domain/index.js';
+import { GiftService, OrderService, DiscountService, BadgeService } from '../service/index.js';
 
 /**
  * @typedef {import('../service/DiscountService.js').BenefitResult} BenefitResult
@@ -24,6 +24,7 @@ class Controller {
     order: OrderService,
     gift: GiftService,
     discount: DiscountService,
+    badge: BadgeService,
   };
 
   /**
@@ -31,12 +32,17 @@ class Controller {
    */
   async start() {
     this.#printStartComment();
+
     const receipt = await this.#createReceipt();
     await this.#processOrder(receipt);
+
     const benefits = this.#processAllEvents(receipt);
     this.#printBenefits(benefits);
     this.#printBenefitAmount(receipt);
     this.#printPaymentAmount(receipt);
+
+    const badge = this.#processBadgeEvent(receipt);
+    this.#printBadge(badge);
   }
 
   /**
@@ -116,6 +122,15 @@ class Controller {
    */
   #processSpecialDiscount(receipt) {
     return this.#service.discount.special(receipt);
+  }
+
+  /**
+   * 배지 이벤트를 진행합니다.
+   * @param {Receipt} receipt - 배지를 얻을 영수증입니다.
+   * @returns {BenefitResult | null} - 배지입니다.
+   */
+  #processBadgeEvent(receipt) {
+    return this.#service.badge.getBadge(receipt);
   }
 
   /**
@@ -200,6 +215,14 @@ class Controller {
   #printPaymentAmount(receipt) {
     const paymentAmount = receipt.getPrice().payment;
     this.#view.output.paymentAmount(paymentAmount);
+  }
+
+  /**
+   * 배지를 출력합니다.
+   * @param {Badge} badge - 출력할 배지입니다.
+   */
+  #printBadge(badge) {
+    this.#view.output.badge(badge);
   }
 
   /**

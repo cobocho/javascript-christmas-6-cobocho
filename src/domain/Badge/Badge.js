@@ -1,6 +1,6 @@
 class Badge {
   /**
-   * 결제 금액별 배지입니다.
+   * 혜택 금액별 배지입니다.
    */
   static #BADGE_LIST = [
     { badge: new Badge('별'), minimumPrice: 5_000 },
@@ -22,8 +22,8 @@ class Badge {
   }
 
   /**
-   * 금액에 따른 배지를 반환합니다.
-   * @param {number} price 결제 금액입니다.
+   * 혜택 금액에 따른 배지를 반환합니다.
+   * @param {number} price 혜택 금액입니다.
    * @returns {Badge | null} 금액에 따른 배지입니다.
    */
   static valueOf(price) {
