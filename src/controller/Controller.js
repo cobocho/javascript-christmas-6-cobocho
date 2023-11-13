@@ -36,7 +36,10 @@ class Controller {
     const giftResult = this.#processGiveaway(receipt);
     const dDayResult = this.#processDDayDiscount(receipt);
     const dayOfWeekResult = this.#processDayOfWeekDiscount(receipt);
-    const benefits = [dDayResult, dayOfWeekResult, giftResult].filter((benefit) => benefit);
+    const specialResult = this.#processSpecialDiscount(receipt);
+    const benefits = [dDayResult, dayOfWeekResult, giftResult, specialResult].filter(
+      (benefit) => benefit,
+    );
     this.#printBenefits(benefits);
   }
 
@@ -93,6 +96,15 @@ class Controller {
    */
   #processDayOfWeekDiscount(receipt) {
     return this.#service.discount.dayOfWeek(receipt);
+  }
+
+  /**
+   * 특별 할인을 진행합니다.
+   * @param {Receipt} receipt - 할인을 적용할 영수증입니다.
+   * @returns {BenefitResult | null} - 할인 결과입니다.
+   */
+  #processSpecialDiscount(receipt) {
+    return this.#service.discount.special(receipt);
   }
 
   /**
