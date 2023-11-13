@@ -33,11 +33,7 @@ class Controller {
     this.#printStartComment();
     const receipt = await this.#createReceipt();
     await this.#processOrder(receipt);
-    const giftResult = this.#processGiveaway(receipt);
-    const dDayResult = this.#processDDayDiscount(receipt);
-    const dayOfWeekResult = this.#processDayOfWeekDiscount(receipt);
-    const specialResult = this.#processSpecialDiscount(receipt);
-    const benefits = [dDayResult, dayOfWeekResult, specialResult, giftResult].filter(Boolean);
+    const benefits = this.#processAllEvents(receipt);
     this.#printBenefits(benefits);
     this.#printBenefitAmount(receipt);
     this.#printPaymentAmount(receipt);
@@ -67,6 +63,21 @@ class Controller {
     });
     this.#printOrders(receipt);
     this.#printCostPrice(receipt);
+  }
+
+  /**
+   * 모든 이벤트를 진행합니다.
+   * @param {Receipt} receipt - 혜택을 기록할 영수증입니다.
+   * @returns {BenefitResult[]} - 혜택 결과입니다.
+   */
+  #processAllEvents(receipt) {
+    const giftResult = this.#processGiveaway(receipt);
+    const dDayResult = this.#processDDayDiscount(receipt);
+    const dayOfWeekResult = this.#processDayOfWeekDiscount(receipt);
+    const specialResult = this.#processSpecialDiscount(receipt);
+    const benefits = [dDayResult, dayOfWeekResult, specialResult, giftResult].filter(Boolean);
+
+    return benefits;
   }
 
   /**
