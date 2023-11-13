@@ -1,3 +1,4 @@
+import OrderTaker from '../../OrderTaker/OrderTaker.js';
 import Receipt from '../../Receipt/Receipt.js';
 import SpecialDiscounter from '../SpecialDiscounter.js';
 
@@ -19,16 +20,15 @@ describe('SpecialDiscounter 테스트', () => {
   ])(`방문일이 이벤트일이면 ${SpecialDiscounter.DISCOUNT_AMOUNT}원 할인한다.`, ({ date }) => {
     // given
     const receipt = Receipt.of(new Date(date));
-    receipt.orderMany([{ name: '티본스테이크', quantity: 1 }]);
+    const orderDetail = OrderTaker.takeOrder('티본스테이크', 1);
+    receipt.order([orderDetail]);
 
     // when
-    const result = specialDiscounter.run(receipt);
+    const { name, benefit } = specialDiscounter.run(receipt);
 
     // then
-    expect(result).toEqual({
-      name: SpecialDiscounter.EVENT_NAME,
-      benefit: 1_000,
-    });
+    expect(name).toBe(SpecialDiscounter.EVENT_NAME);
+    expect(benefit).toBe(SpecialDiscounter.DISCOUNT_AMOUNT);
   });
 
   it.each([
@@ -60,7 +60,8 @@ describe('SpecialDiscounter 테스트', () => {
   ])('방문일이 이벤트일이 아니면 할인하지 않는다.', ({ date }) => {
     // given
     const receipt = Receipt.of(new Date(date));
-    receipt.orderMany([{ name: '티본스테이크', quantity: 1 }]);
+    const orderDetail = OrderTaker.takeOrder('티본스테이크', 1);
+    receipt.order([orderDetail]);
 
     // when
     const result = specialDiscounter.run(receipt);

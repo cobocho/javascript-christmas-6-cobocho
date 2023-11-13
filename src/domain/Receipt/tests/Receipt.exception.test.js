@@ -1,3 +1,4 @@
+import OrderTaker from '../../OrderTaker/OrderTaker.js';
 import Receipt from '../Receipt.js';
 
 const INVALID_DATES = [
@@ -20,16 +21,16 @@ describe('Receipt 예외 테스트', () => {
     expect(result).toThrow(Receipt.ERROR_MESSAGES.invalidDate);
   });
 
-  it('`orderMany` 호출 시 동일한 메뉴를 재주문 시 에러가 발생한다.', () => {
+  it('`order` 호출 시 동일한 메뉴를 재주문 시 에러가 발생한다.', () => {
     // given
     const receipt = Receipt.of(new Date());
-    const duplicatedOrders = [
-      { name: '아이스크림', quantity: 1 },
-      { name: '아이스크림', quantity: 2 },
+    const orderDetails = [
+      OrderTaker.takeOrder('아이스크림', 1),
+      OrderTaker.takeOrder('아이스크림', 1),
     ];
 
     // when
-    const result = () => receipt.orderMany(duplicatedOrders);
+    const result = () => receipt.order(orderDetails);
 
     // then
     expect(result).toThrow(Receipt.ERROR_MESSAGES.invalidOrder);
@@ -41,16 +42,20 @@ describe('Receipt 예외 테스트', () => {
     },
     {
       orders: [
-        { name: '아이스크림', quantity: 15 },
-        { name: '제로콜라', quantity: 6 },
+        { name: '아이스크림', quantity: 16 },
+        { name: '제로콜라', quantity: 5 },
       ],
     },
   ])(`${Receipt.MAX_FOOD_QUANTITY}개 이상 주문 시 에러가 발생한다.`, ({ orders }) => {
     // given
     const receipt = Receipt.of(new Date());
+    const orderDetails = Array.from(orders, (order) => {
+      const { name, quantity } = order;
+      return OrderTaker.takeOrder(name, quantity);
+    });
 
     // when
-    const result = () => receipt.orderMany(orders);
+    const result = () => receipt.order(orderDetails);
 
     // then
     expect(result).toThrow(Receipt.ERROR_MESSAGES.invalidOrder);
@@ -76,9 +81,13 @@ describe('Receipt 예외 테스트', () => {
   ])('음료만 주문 시 에러가 발생한다.', ({ orders }) => {
     // given
     const receipt = Receipt.of(new Date());
+    const orderDetails = Array.from(orders, (order) => {
+      const { name, quantity } = order;
+      return OrderTaker.takeOrder(name, quantity);
+    });
 
     // when
-    const result = () => receipt.orderMany(orders);
+    const result = () => receipt.order(orderDetails);
 
     // then
     expect(result).toThrow(Receipt.ERROR_MESSAGES.invalidOrder);

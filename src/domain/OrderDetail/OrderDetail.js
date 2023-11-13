@@ -38,6 +38,14 @@ class OrderDetail {
   }
 
   /**
+   * 주문내역의 음식 이름을 반환합니다.
+   * @returns {number} - 주문 내역의 음식 이름입니다.
+   */
+  getName() {
+    return this.#name;
+  }
+
+  /**
    * 주문내역의 음식 갯수를 반환합니다.
    * @returns {number} - 음식의 갯수입니다.
    */

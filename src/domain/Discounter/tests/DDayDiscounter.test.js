@@ -1,4 +1,4 @@
-import AdditionalDiscount from '../../AdditionalDiscount/AdditionalDiscount.js';
+import OrderTaker from '../../OrderTaker/OrderTaker.js';
 import Receipt from '../../Receipt/Receipt.js';
 import DDayDiscounter from '../DDayDiscounter.js';
 
@@ -18,17 +18,15 @@ describe('DDayDiscounter 테스트', () => {
   ])('크리스마스 디데이에 비례하여 할인한다.', ({ date, discount }) => {
     // given
     const receipt = Receipt.of(new Date(date));
-    receipt.orderMany([{ name: '티본스테이크', quantity: 1 }]);
+    const orderDetail = OrderTaker.takeOrder('티본스테이크', 1);
+    receipt.order([orderDetail]);
 
     // when
-    dDayDiscounter.run(receipt);
+    const { name, benefit } = dDayDiscounter.run(receipt);
 
     // then
-    expect(receipt.getAdditionalDiscounts()).toEqual([
-      AdditionalDiscount.of(DDayDiscounter.EVENT_NAME, discount),
-    ]);
-    expect(receipt.getPrice().cost).toBe(55_000);
-    expect(receipt.getPrice().discount).toBe(discount);
+    expect(name).toBe(DDayDiscounter.EVENT_NAME);
+    expect(benefit).toBe(discount);
   });
 
   it.each([{ date: '2023-12-26' }, { date: '2023-12-30' }, { date: '2024-01-01' }])(
@@ -36,13 +34,14 @@ describe('DDayDiscounter 테스트', () => {
     ({ date }) => {
       // given
       const receipt = Receipt.of(new Date(date));
-      receipt.orderMany([{ name: '티본스테이크', quantity: 1 }]);
+      const orderDetail = OrderTaker.takeOrder('티본스테이크', 1);
+      receipt.order([orderDetail]);
 
       // when
-      dDayDiscounter.run(receipt);
+      const result = dDayDiscounter.run(receipt);
 
       // then
-      expect(receipt.getAdditionalDiscounts()).toHaveLength(0);
+      expect(result).toBeNull();
     },
   );
 });

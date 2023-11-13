@@ -1,3 +1,4 @@
+import OrderTaker from '../../OrderTaker/OrderTaker.js';
 import Receipt from '../../Receipt/Receipt.js';
 import DayOfWeekDiscounter from '../DayOfWeekDiscounter.js';
 
@@ -41,7 +42,11 @@ describe('DayOfWeekDiscounter 테스트', () => {
   ])('주말에는 메인메뉴를 개당 2,023원 할인한다.', ({ date, orders, discount }) => {
     // given
     const receipt = Receipt.of(new Date(date));
-    receipt.orderMany(orders);
+    const orderDetails = Array.from(orders, (order) => {
+      const { name, quantity } = order;
+      return OrderTaker.takeOrder(name, quantity);
+    });
+    receipt.order(orderDetails);
 
     // when
     const { name, benefit } = dayOfWeekDiscounter.run(receipt);
@@ -125,7 +130,11 @@ describe('DayOfWeekDiscounter 테스트', () => {
   ])('평일에는 디저트를 개당 2,023원 할인한다.', ({ date, orders, discount }) => {
     // given
     const receipt = Receipt.of(new Date(date));
-    receipt.orderMany(orders);
+    const orderDetails = Array.from(orders, (order) => {
+      const { name, quantity } = order;
+      return OrderTaker.takeOrder(name, quantity);
+    });
+    receipt.order(orderDetails);
 
     // when
     const { name, benefit } = dayOfWeekDiscounter.run(receipt);
@@ -171,7 +180,11 @@ describe('DayOfWeekDiscounter 테스트', () => {
   ])('요일 이벤트 적용대상이 아니면 할인이 되지 않는다.', ({ date, orders }) => {
     // given
     const receipt = Receipt.of(new Date(date));
-    receipt.orderMany(orders);
+    const orderDetails = Array.from(orders, (order) => {
+      const { name, quantity } = order;
+      return OrderTaker.takeOrder(name, quantity);
+    });
+    receipt.order(orderDetails);
 
     // when
     const result = dayOfWeekDiscounter.run(receipt);
@@ -189,7 +202,11 @@ describe('DayOfWeekDiscounter 테스트', () => {
   ])('10,000원 이하라면 할인이 되지 않는다.', ({ date, orders }) => {
     // given
     const receipt = Receipt.of(new Date(date));
-    receipt.orderMany(orders);
+    const orderDetails = Array.from(orders, (order) => {
+      const { name, quantity } = order;
+      return OrderTaker.takeOrder(name, quantity);
+    });
+    receipt.order(orderDetails);
 
     // when
     const result = dayOfWeekDiscounter.run(receipt);

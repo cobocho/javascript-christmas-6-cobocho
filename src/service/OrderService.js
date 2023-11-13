@@ -1,4 +1,4 @@
-import { Receipt } from '../domain/index.js';
+import { OrderTaker, Receipt } from '../domain/index.js';
 import SYSTEM from '../constants/system.js';
 import { dateStringGenerator } from '../utils/date/date.js';
 
@@ -19,7 +19,11 @@ const OrderService = Object.freeze({
    * @param {{ name: string, quantity: number }[]} orders - 주문 내용입니다.
    */
   orderFoods(receipt, orders) {
-    receipt.orderMany(orders);
+    const orderDetails = Array.from(orders, (order) => {
+      const { name, quantity } = order;
+      return OrderTaker.takeOrder(name, quantity);
+    });
+    receipt.order(orderDetails);
   },
 });
 

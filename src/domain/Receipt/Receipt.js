@@ -70,43 +70,30 @@ class Receipt {
 
   /**
    * 주문내역을 반영합니다.
-   * @param {{ name: string, quantity: number }[]} orders 주문한 메뉴 내역들입니다.
+   * @param {OrderDetail[]} orderDetails 주문한 메뉴 내역들입니다.
    */
-  orderMany(orders) {
-    this.#validateOrderMany(orders);
-    orders.forEach(({ name, quantity }) => {
-      const orderDetail = OrderTaker.takeOrder(name, quantity);
-      this.#orderDetails.push(orderDetail);
-    });
+  order(orderDetails) {
+    this.#validateOrderDetails(orderDetails);
+    this.#orderDetails.push(...orderDetails);
   }
 
   /**
    * 주문의 유효성을 검사합니다.
-   * @param {{ name: string, quantity: number }[]} orders 주문한 메뉴 내역들입니다.
+   * @param {OrderDetail[]} orders 주문한 메뉴 내역들입니다.
    */
-  #validateOrderMany(orders) {
-    const names = Array.from(orders, (order) => order.name);
-    const totalQuantity = orders.reduce((total, order) => total + order.quantity, 0);
-    const categories = Array.from(names, (name) => OrderTaker.findMenu(name).foodCategory);
+  #validateOrderDetails(orders) {
+    const names = Array.from(orders, (order) => order.getName());
+    const totalQuantity = orders.reduce((total, order) => total + order.getQuantity(), 0);
+    const allFoods = Array.from(orders, (order) => order.getFoods()).flat();
     if (isDuplicated(names)) {
       throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
     }
     if (totalQuantity > Receipt.MAX_FOOD_QUANTITY) {
       throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
     }
-    if (categories.every((category) => category === Drink)) {
+    if (allFoods.every((food) => food instanceof Drink)) {
       throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
     }
-  }
-
-  /**
-   * 주문을 하여 주문 내역에 반영합니다.
-   * @param {string} name 주문한 메뉴의 이름입니다.
-   * @param {number} quantity 주문한 메뉴의 갯수입니다.
-   */
-  order(name, quantity) {
-    const orderDetail = OrderTaker.takeOrder(name, quantity);
-    this.#orderDetails.push(orderDetail);
   }
 
   /**
