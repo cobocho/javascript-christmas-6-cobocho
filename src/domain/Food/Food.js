@@ -39,14 +39,6 @@ class Food {
   }
 
   /**
-   * 음식의 이름을 반환합니다.
-   * @returns {string} - 음식의 이름입니다.
-   */
-  getName() {
-    return this.#name;
-  }
-
-  /**
    * 음식의 가격을 반환합니다.
    * @returns {PriceInfo} - 음식의 가격입니다.
    */

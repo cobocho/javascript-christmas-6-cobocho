@@ -1,17 +1,6 @@
 import Food from '../Food.js';
 
 describe('Food 테스트', () => {
-  it('`getName` 호출 시 음식의 이름을 반환한다.', () => {
-    // given
-    const food = Food.of('케이크', 4_500);
-
-    // when
-    const result = food.getName();
-
-    // then
-    expect(result).toBe('케이크');
-  });
-
   it('`getPrice` 호출 시 `PriceInfo`를 반환한다.', () => {
     // given
     const food = Food.of('케이크', 4_500);
