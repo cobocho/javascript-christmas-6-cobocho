@@ -10,6 +10,7 @@ const InputView = Object.freeze({
    */
   async read(query) {
     const input = await Console.readLineAsync(query);
+
     return input;
   },
 
@@ -19,6 +20,7 @@ const InputView = Object.freeze({
    */
   async readVisitDate() {
     const input = await this.read(QUERIES.visitDate);
+
     return input || null;
   },
 
@@ -28,6 +30,7 @@ const InputView = Object.freeze({
    */
   async readOrderMenus() {
     const input = await this.read(QUERIES.orderMenus);
+
     return input;
   },
 });

@@ -55,6 +55,7 @@ class DDayDiscounter extends Discounter {
     const dayDifference = Math.floor((visitDate - DDayDiscounter.D_DAY) / (1000 * 60 * 60 * 24));
     const reduction = DDayDiscounter.DISCOUNT_AMOUNT_PER_D_DAY * dayDifference;
     const discount = DDayDiscounter.MAX_DISCOUNT_AMOUNT + reduction;
+
     receipt.addAdditionalDiscount(AdditionalDiscount.of(DDayDiscounter.EVENT_NAME, discount));
 
     return { name: DDayDiscounter.EVENT_NAME, benefit: discount };
@@ -68,6 +69,7 @@ class DDayDiscounter extends Discounter {
   #isEventPeriod(visitDate) {
     const scheduler = Scheduler.of();
     const { start, end } = DDayDiscounter.PERIOD;
+
     scheduler.addEventPeriod(new Date(start), new Date(end));
 
     return scheduler.isEventDate(visitDate);

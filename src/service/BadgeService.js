@@ -21,9 +21,11 @@ const BadgeService = Object.freeze({
       BadgeService.EVENT_PERIOD.year,
       BadgeService.EVENT_PERIOD.month,
     );
+
     if (!badgeEventScheduler.isEventDate(receipt.getDate())) {
       return null;
     }
+
     const result = Badge.valueOf(receipt.getPrice().benefit);
 
     return result ? result.getName() : result;

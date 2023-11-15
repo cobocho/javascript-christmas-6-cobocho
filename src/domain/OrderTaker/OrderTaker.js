@@ -122,6 +122,7 @@ const OrderTaker = Object.freeze({
     if (quantity < MIN_QUANTITY || !Number.isInteger(quantity)) {
       throw new ApplicationError(this.ERROR_MESSAGES.invalidOrder);
     }
+
     const orderDetail = OrderDetail.of({ foodName, price, foodCategory, quantity });
 
     return orderDetail;

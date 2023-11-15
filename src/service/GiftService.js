@@ -33,6 +33,7 @@ const GiftService = Object.freeze({
     }
     receipt.receiveGifts(gifts);
     const benefit = gifts.reduce((discounts, gift) => discounts + gift.getPrice().cost, 0);
+
     return { name: GiftService.EVENT_NAME, benefit };
   },
 });

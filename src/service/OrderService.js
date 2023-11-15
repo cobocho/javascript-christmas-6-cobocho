@@ -12,6 +12,7 @@ const OrderService = Object.freeze({
    */
   publishReceipt(date) {
     const receiptDate = new Date(dateStringGenerator({ ...SYSTEM.date, day: date }));
+
     return Receipt.of(receiptDate);
   },
 
@@ -25,6 +26,7 @@ const OrderService = Object.freeze({
       const { name, quantity } = order;
       return OrderTaker.takeOrder(name, quantity);
     });
+
     receipt.order(orderDetails);
   },
 });

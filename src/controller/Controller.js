@@ -54,10 +54,12 @@ class Controller {
    */
   async #createReceipt() {
     let receipt;
+
     await this.#handleError(async () => {
       const date = await this.#readVisitDate();
       receipt = this.#service.order.publishReceipt(date);
     });
+
     return receipt;
   }
 
@@ -70,6 +72,7 @@ class Controller {
       const orders = await this.#readOrderMenus();
       this.#service.order.orderFoods(receipt, orders);
     });
+
     this.#printOrders(receipt);
     this.#printCostPrice(receipt);
   }
@@ -84,6 +87,7 @@ class Controller {
     const dDayResult = this.#processDDayDiscount(receipt);
     const dayOfWeekResult = this.#processDayOfWeekDiscount(receipt);
     const specialResult = this.#processSpecialDiscount(receipt);
+
     const benefits = [dDayResult, dayOfWeekResult, specialResult, giftResult].filter(Boolean);
 
     return benefits;
@@ -96,7 +100,9 @@ class Controller {
    */
   #processGiveaway(receipt) {
     const giftResult = this.#service.gift.giveaway(receipt);
+
     this.#printGifts(receipt);
+
     return giftResult;
   }
 
@@ -151,6 +157,7 @@ class Controller {
    */
   async #readOrderMenus() {
     const menus = (await this.#view.input.readOrderMenus()).split(SYSTEM.menuSeparator);
+
     const orders = Array.from(menus, (menu) => {
       const [name, quantity] = menu.split(SYSTEM.priceSeparator);
       return { name, quantity: Number(quantity) };
@@ -172,6 +179,7 @@ class Controller {
    */
   #printOrders(receipt) {
     const orders = Array.from(receipt.getOrderDetails(), (order) => order.toString());
+
     this.#view.output.preview();
     this.#view.output.orders(orders);
   }
@@ -182,6 +190,7 @@ class Controller {
    */
   #printCostPrice(receipt) {
     const { cost } = receipt.getPrice();
+
     this.#view.output.costPrice(cost);
   }
 
@@ -191,6 +200,7 @@ class Controller {
    */
   #printGifts(receipt) {
     const gifts = Array.from(receipt.getGifts(), (gift) => gift.toString());
+
     this.#view.output.gifts(gifts);
   }
 
@@ -208,6 +218,7 @@ class Controller {
    */
   #printBenefitAmount(receipt) {
     const benefitAmount = receipt.getPrice().benefit;
+
     this.#view.output.benefitAmount(benefitAmount);
   }
 
@@ -217,6 +228,7 @@ class Controller {
    */
   #printPaymentAmount(receipt) {
     const paymentAmount = receipt.getPrice().payment;
+
     this.#view.output.paymentAmount(paymentAmount);
   }
 

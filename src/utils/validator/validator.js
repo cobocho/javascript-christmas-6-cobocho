@@ -6,6 +6,7 @@
  */
 export const invalidInstanceElement = (instances, constructor) => {
   const result = instances.some((instance) => !(instance instanceof constructor));
+
   return result;
 };
 
@@ -59,5 +60,6 @@ export const isSubClass = (subClass, superClass) => {
     if (targetPrototype === superPrototype) return true;
     targetPrototype = Object.getPrototypeOf(targetPrototype);
   } while (targetPrototype);
+
   return false;
 };

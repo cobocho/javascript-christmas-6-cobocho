@@ -59,6 +59,7 @@ class Scheduler {
   addEventPeriod(start, end) {
     this.#validatePeriod(start, end);
     const currentDate = new Date(start);
+
     while (currentDate <= end) {
       this.addEventDate(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
@@ -68,6 +69,7 @@ class Scheduler {
   #validatePeriod(start, end) {
     this.#validateDate(start);
     this.#validateDate(end);
+
     if (end < start) {
       throw new ApplicationError(Scheduler.ERROR_MESSAGES.invalidPeriod);
     }
@@ -80,8 +82,10 @@ class Scheduler {
    */
   addEventMonth(year, month) {
     this.#validateEventMonth(year, month);
+
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0);
+
     this.addEventPeriod(startDate, endDate);
   }
 

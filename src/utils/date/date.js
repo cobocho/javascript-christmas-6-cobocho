@@ -65,5 +65,6 @@ export const dateStringGenerator = ({ year, month, day }) => {
  */
 export const isWeekday = (date) => {
   const dayOfWeek = date.getDay();
+
   return dayOfWeek >= 0 && dayOfWeek <= 4;
 };

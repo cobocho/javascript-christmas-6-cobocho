@@ -85,6 +85,7 @@ class Receipt {
     const names = Array.from(orders, (order) => order.getName());
     const totalQuantity = orders.reduce((total, order) => total + order.getQuantity(), 0);
     const allFoods = Array.from(orders, (order) => order.getFoods()).flat();
+
     if (isDuplicated(names)) {
       throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
     }

@@ -56,9 +56,11 @@ class DayOfWeekDiscounter extends Discounter {
    */
   _discount(receipt) {
     const visitDate = receipt.getDate();
+
     if (!this.#isEventPeriod(visitDate)) {
       return null;
     }
+
     const { name, category } = this.#getDiscountInfo(isWeekday(visitDate));
 
     return this.#discountEventFoods({ name, category, receipt });
@@ -104,6 +106,7 @@ class DayOfWeekDiscounter extends Discounter {
   #isEventPeriod(visitDate) {
     const scheduler = Scheduler.of();
     const { start, end } = DayOfWeekDiscounter.PERIOD;
+
     scheduler.addEventPeriod(new Date(start), new Date(end));
 
     return scheduler.isEventDate(visitDate);

@@ -54,6 +54,7 @@ class SpecialDiscounter extends Discounter {
     if (!this.#isEventPeriod(receipt.getDate())) {
       return null;
     }
+
     receipt.addAdditionalDiscount(
       AdditionalDiscount.of(SpecialDiscounter.EVENT_NAME, SpecialDiscounter.DISCOUNT_AMOUNT),
     );
@@ -68,6 +69,7 @@ class SpecialDiscounter extends Discounter {
    */
   #isEventPeriod(visitDate) {
     const scheduler = Scheduler.of();
+
     SpecialDiscounter.DAY_LIST.forEach((day) => scheduler.addEventDate(new Date(day)));
 
     return scheduler.isEventDate(visitDate);

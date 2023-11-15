@@ -28,6 +28,7 @@ class Badge {
    */
   static valueOf(benefit) {
     const result = Badge.#BADGE_LIST.find((badge) => badge.minimumPrice <= benefit);
+
     return result ? result.badge : null;
   }
 

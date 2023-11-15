@@ -23,6 +23,7 @@ class Discounter {
     if (!this.#isMeetRequirement(receipt)) {
       return null;
     }
+
     return this._discount(receipt);
   }
 

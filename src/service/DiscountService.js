@@ -20,6 +20,7 @@ const DiscountService = Object.freeze({
   dDay(receipt) {
     const discounter = DDayDiscounter.of();
     const result = discounter.run(receipt);
+
     return result;
   },
 
@@ -31,6 +32,7 @@ const DiscountService = Object.freeze({
   dayOfWeek(receipt) {
     const discounter = DayOfWeekDiscounter.of();
     const result = discounter.run(receipt);
+
     return result;
   },
 
@@ -42,6 +44,7 @@ const DiscountService = Object.freeze({
   special(receipt) {
     const discounter = SpecialDiscounter.of();
     const result = discounter.run(receipt);
+
     return result;
   },
 });
