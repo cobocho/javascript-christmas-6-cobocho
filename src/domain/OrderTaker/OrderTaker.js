@@ -10,6 +10,13 @@ import OrderDetail from '../OrderDetail/OrderDetail.js';
  * @property {number} price - 음식의 가격입니다.
  */
 
+/**
+ * @typedef GiftsInfo 증정품에 대한 정보입니다.
+ * @property {number} minimumCost - 증정품의 최소 결제금액입니다.
+ * @property {number} giftName - 증정품의 이름입니다.
+ * @property {number} quantity - 증정품의 갯수입니다.
+ */
+
 const OrderTaker = Object.freeze({
   /**
    * 메뉴판입니다.
@@ -79,6 +86,11 @@ const OrderTaker = Object.freeze({
     },
   ],
 
+  /**
+   * 증정품 목록 입니다.
+   * @readonly
+   * @type {GiftsInfo[]}
+   */
   gifts: [
     {
       minimumCost: 120_000,
@@ -124,6 +136,7 @@ const OrderTaker = Object.freeze({
     }
 
     const gifts = this.gifts.filter((giveaway) => giveaway.minimumCost <= costPrice);
+
     return Array.from(gifts, ({ giftName }) => {
       const { foodName, foodCategory, price } = this.findMenu(giftName);
       return OrderDetail.of({ foodName, price, foodCategory, quantity: 1 });
