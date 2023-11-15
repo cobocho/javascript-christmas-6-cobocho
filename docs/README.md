@@ -137,12 +137,13 @@
   - MainCourse
   - Dessert
   - Drink
-- OrderDetail
 - Discounter
   - DDayDiscounter
   - DayOfWeekDiscounter
   - SpecialDiscounter
-- FoodProvider
+- OrderDetail
+- OrderTaker
+- AdditionalDiscount
 - Receipt
 - Scheduler
 - Badge
@@ -306,6 +307,342 @@
 
   - [x] 방문일이 이벤트일 일시 총 주문금액에서 1,000원 할인한다.
 
+# 🔍 클래스 다이어그램
+
+![](https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/10134308-d905-43b3-bfe1-7591e8031a36)
+
+# 🚦 프로세스 요약
+
+<img width="1337" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/2fad6650-2bd1-4b74-b2d3-5495efbea5f9">
+
+## 영수증 생성
+
+<img width="800" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/ead74bdf-3a01-40f0-8378-1ccf2e78ebec">
+
+```js
+// OrderService.js
+const receiptDate = new Date(dateStringGenerator({ ...SYSTEM.date, day: date }));
+```
+- 사용자가 입력한 값을 기반으로 시스템의 디폴트 일자를 기반으로한 발행일자를 생성한다.
+
+```js
+// Receipt.js
+  #validate(date) {
+    if (isInvalidDate(date)) {
+      throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidDate);
+    }
+  }
+```
+- 발행일자의 유효성 검사를 진행한다.
+
+```js
+// OrderService.js
+return Receipt.of(receiptDate);
+```
+- 생성된 영수증을 반환한다.
+
+## 메뉴 주문
+
+<img width="800" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/64813864-8715-4297-be39-9ecd45a52d0b">
+
+```js
+// Controller.js
+  async #readOrderMenus() {
+    const menus = (await this.#view.input.readOrderMenus()).split(SYSTEM.menuSeparator);
+    const orders = Array.from(menus, (menu) => {
+      const [name, quantity] = menu.split(SYSTEM.priceSeparator);
+      return { name, quantity: Number(quantity) };
+    });
+
+    return orders;
+  }
+```
+- 사용자가 입력한 주문을 파싱한다.
+
+```js
+// OrderService.js
+const orderDetails = Array.from(orders, (order) => {
+  const { name, quantity } = order;
+  return OrderTaker.takeOrder(name, quantity);
+});
+
+// OrderTaker.js
+  takeOrder(name, quantity) {
+    const { foodName, price, foodCategory } = this.findMenu(name);
+    const MIN_QUANTITY = 1;
+
+    if (quantity < MIN_QUANTITY || !Number.isInteger(quantity)) {
+      throw new ApplicationError(this.ERROR_MESSAGES.invalidOrder);
+    }
+    const orderDetail = OrderDetail.of({ foodName, price, foodCategory, quantity });
+
+    return orderDetail;
+  },
+
+  findMenu(name) {
+    const result = this.menu.find((food) => food.foodName === name);
+
+    if (!result) {
+      throw new ApplicationError(this.ERROR_MESSAGES.invalidOrder);
+    }
+
+    return result;
+  },
+```
+- `OrderTaker`에게 주문을 요청해 `OrderDetail`을 생성한다.
+
+```js
+// OrderService.js
+receipt.order(orderDetails);
+```
+- 생성한 `OrderDetail`을 `Receipt`에 반영한다.
+
+```js
+// Receipt.js
+  #validateOrderDetails(orders) {
+    const names = Array.from(orders, (order) => order.getName());
+    const totalQuantity = orders.reduce((total, order) => total + order.getQuantity(), 0);
+    const allFoods = Array.from(orders, (order) => order.getFoods()).flat();
+    if (isDuplicated(names)) {
+      throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
+    }
+    if (totalQuantity > Receipt.MAX_FOOD_QUANTITY) {
+      throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
+    }
+    if (allFoods.every((food) => food instanceof Drink)) {
+      throw new ApplicationError(Receipt.ERROR_MESSAGES.invalidOrder);
+    }
+  }
+```
+- 생성된 `OrderDetail`이 주문 조건에 부합한지 유효성 검사를 진행한다.
+
+## 증정품 부여
+
+<img width="800" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/2fc4a7ad-1028-4e06-bf39-6b1bbc0c9802">
+
+```js
+// GiftService.js
+  giveaway(receipt) {
+    const giftEventScheduler = Scheduler.of();
+    giftEventScheduler.addEventMonth(GiftService.EVENT_PERIOD.year, GiftService.EVENT_PERIOD.month);
+    if (giftEventScheduler.isEventDate(receipt.getDate())) {
+      return null;
+    }
+    // ...
+});
+```
+- 증정 이벤트의 기간을 `Scheduler`에 설정한 후 `Receipt`의 발행일자로 이벤트 기간인지 체크한다.
+
+```js
+// GiftService.js
+const gifts = OrderTaker.giveaway(receipt.getPrice().payment);
+
+// OrderTaker.js
+  giveaway(costPrice) {
+    if (typeof costPrice !== 'number') {
+      throw new ApplicationError(OrderTaker.ERROR_MESSAGES.notNumberPrice);
+    }
+
+    const gifts = this.gifts.filter((giveaway) => giveaway.minimumCost <= costPrice);
+
+    return Array.from(gifts, ({ giftName }) => {
+      const { foodName, foodCategory, price } = this.findMenu(giftName);
+      return OrderDetail.of({ foodName, price, foodCategory, quantity: 1 });
+    });
+  },
+```
+- `OrderTaker`에 주문 전 금액을 기입해 증정품을 반환받는다.
+
+```js
+// GiftService.js
+receipt.receiveGifts(gifts);
+```
+- 반환받은 증정품을 `Receipt`에 기입한다.
+
+## 크리스마스 디데이 이벤트
+
+<img width="800" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/1b3a4b0d-a8df-4dce-b508-d2ec4c16a464">
+
+```js
+// DiscountService.js
+const discounter = DDayDiscounter.of();
+const result = discounter.run(receipt);
+```
+- `DDayDiscounter`를 생성한 후 `Receipt`을 기입한다.
+
+```js
+// DDayDiscounter.js
+  _discount(receipt) {
+    if (!this.#isEventPeriod(receipt.getDate())) {
+      return null;
+    }
+    // ...
+  }
+
+  #isEventPeriod(visitDate) {
+      const scheduler = Scheduler.of();
+      const { start, end } = DDayDiscounter.PERIOD;
+      scheduler.addEventPeriod(new Date(start), new Date(end));
+  
+      return scheduler.isEventDate(visitDate);
+  }
+```
+- 입력받은 `Receipt`의 발행일자가 크리스마스 디데이 할인 이벤트 기간과 동일한지 판별한다.
+
+```js
+// DDayDiscounter.js
+  _discount(receipt) {
+    // ...
+    const visitDate = receipt.getDate().getTime();
+    const dayDifference = Math.floor((visitDate - DDayDiscounter.D_DAY) / (1000 * 60 * 60 * 24));
+    const reduction = DDayDiscounter.DISCOUNT_AMOUNT_PER_D_DAY * dayDifference;
+    const discount = DDayDiscounter.MAX_DISCOUNT_AMOUNT + reduction;
+    receipt.addAdditionalDiscount(AdditionalDiscount.of(DDayDiscounter.EVENT_NAME, discount));
+
+    return { name: DDayDiscounter.EVENT_NAME, benefit: discount };
+  }
+```
+- 25일과의 일자 차이를 계산한 후 결과값을 `Receipt`에 기입한다.
+
+## 요일 할인 이벤트
+
+<img width="800" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/d06bee85-677f-41d3-b80c-29bc7750121d">
+
+```js
+// DiscountService.js
+const discounter = DayOfWeekDiscounter.of();
+const result = discounter.run(receipt);
+```
+- `DayOfWeekDiscounter`를 생성한 후 `Receipt`을 기입한다.
+
+```js
+// DayOfWeekDiscounter.js
+  _discount(receipt) {
+    if (!this.#isEventPeriod(receipt.getDate())) {
+      return null;
+    }
+    // ...
+  }
+
+  #isEventPeriod(visitDate) {
+    const scheduler = Scheduler.of();
+    const { start, end } = DayOfWeekDiscounter.PERIOD;
+    scheduler.addEventPeriod(new Date(start), new Date(end));
+
+    return scheduler.isEventDate(visitDate);
+  }
+```
+- 입력받은 `Receipt`의 발행일자가 요일 할인 이벤트 기간과 동일한지 판별한다.
+
+```js
+// DayOfWeekDiscounter.js
+  _discount(receipt) {
+    const visitDate = receipt.getDate();
+    if (!this.#isEventPeriod(visitDate)) {
+      return null;
+    }
+    const { name, category } = this.#getDiscountInfo(isWeekday(visitDate));
+
+    return this.#discountEventFoods({ name, category, receipt });
+  }
+
+  #discountEventFoods({ name, category, receipt }) {
+    const beforeDiscountPrice = receipt.getPrice().discount;
+    const foods = receipt.getAllFoods().filter((food) => food instanceof category);
+    foods.forEach((food) => food.discount(DayOfWeekDiscounter.DISCOUNT_PER_FOOD));
+    const benefit = receipt.getPrice().discount - beforeDiscountPrice;
+
+    if (!benefit) {
+      return null;
+    }
+
+    return {
+      name,
+      benefit,
+    };
+  }
+```
+- `Receipt`로부터 `Food` 목록을 받고 이벤트 조건에 따라 할인을 반영한다.
+
+
+## 특별 할인 이벤트
+
+<img width="800" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/d06bee85-677f-41d3-b80c-29bc7750121d">
+
+```js
+// DiscountService.js
+const discounter = SpecialDiscounter.of();
+const result = discounter.run(receipt);
+```
+- `SpecialDiscounter`를 생성한 후 `Receipt`을 기입한다.
+
+```js
+// SpecialDiscounter.js
+  _discount(receipt) {
+    if (!this.#isEventPeriod(receipt.getDate())) {
+      return null;
+    }
+    // ...
+  }
+
+  #isEventPeriod(visitDate) {
+    const scheduler = Scheduler.of();
+    SpecialDiscounter.DAY_LIST.forEach((day) => scheduler.addEventDate(new Date(day)));
+
+    return scheduler.isEventDate(visitDate);
+  }
+```
+- 입력받은 `Receipt`의 발행일자가 특별 할인 일자인지 판별한다.
+
+```js
+// SpecialDiscounter.js
+  _discount(receipt) {
+    if (!this.#isEventPeriod(receipt.getDate())) {
+      return null;
+    }
+    receipt.addAdditionalDiscount(
+      AdditionalDiscount.of(SpecialDiscounter.EVENT_NAME, SpecialDiscounter.DISCOUNT_AMOUNT),
+    );
+
+    return { name: SpecialDiscounter.EVENT_NAME, benefit: SpecialDiscounter.DISCOUNT_AMOUNT };
+  }
+```
+-  `Receipt`에 특별 할인을 반영한다.
+
+# 배지 이벤트
+```js
+// BadgeService.js
+  getBadge(receipt) {
+    const badgeEventScheduler = Scheduler.of();
+    badgeEventScheduler.addEventMonth(
+      BadgeService.EVENT_PERIOD.year,
+      BadgeService.EVENT_PERIOD.month,
+    );
+    if (!badgeEventScheduler.isEventDate(receipt.getDate())) {
+      return null;
+    }
+    // ...
+  },
+```
+- `Receipt`의 방문일자가 배지 이벤트 기간인지 확인한다.
+  
+```js
+// BadgeService.js
+  getBadge(receipt) {
+    // ...
+    const result = Badge.valueOf(receipt.getPrice().benefit);
+
+    return result ? result.getName() : result;
+  },
+
+// Badge.js
+  static valueOf(benefit) {
+    const result = Badge.#BADGE_LIST.find((badge) => badge.minimumPrice <= benefit);
+    return result ? result.badge : null;
+  }
+```
+- `Receipt`의 혜택 금액에 따라 배지를 생성 후 반환한다.
+
 # 기획팀 요구사항 다시 돌아보기
 
 - [x] 크리스마스 디데이 할인
@@ -360,15 +697,13 @@
 - [x] 이벤트 배지
   - [x] 이벤트 배지가 부여되지 않는 경우, "없음"으로 보여 주세요.
 
-# 과제 진행 요구 사항
-
 # ✅ 최종 체크포인트
 
-- [ ] `ApplicationTest`를 통과하는가?
-- [ ] 모든 단위 테스트가 통과하는가?
-- [ ] 뎁스가 과도하게 깊은 메서드는 존재하지 않는가?
-- [ ] 컨벤션에 맞게 코드가 작성되었는가?
-- [ ] Node.js 18.17.1 버전에서 실행 가능한가?
-- [ ] `package.json`에 변경사항이 존재하지 않는가?
-- [ ] `process.exit()`를 호출하는 코드가 존재하지 않는가?
-- [ ] 컨트롤러에서 에러 핸들링이 이루어지는가?
+- [x] `ApplicationTest`를 통과하는가?
+- [x] 모든 단위 테스트가 통과하는가?
+- [x] 뎁스가 과도하게 깊은 메서드는 존재하지 않는가?
+- [x] 컨벤션에 맞게 코드가 작성되었는가?
+- [x] Node.js 18.17.1 버전에서 실행 가능한가?
+- [x] `package.json`에 변경사항이 존재하지 않는가?
+- [x] `process.exit()`를 호출하는 코드가 존재하지 않는가?
+- [x] 컨트롤러에서 에러 핸들링이 이루어지는가?
