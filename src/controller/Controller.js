@@ -127,7 +127,7 @@ class Controller {
   /**
    * 배지 이벤트를 진행합니다.
    * @param {Receipt} receipt - 배지를 얻을 영수증입니다.
-   * @returns {BenefitResult | null} - 배지입니다.
+   * @returns {Badge | null} - 배지입니다.
    */
   #processBadgeEvent(receipt) {
     return this.#service.badge.getBadge(receipt);
