@@ -15,6 +15,7 @@ class Food {
     notStringFoodName: ERROR_MESSAGE_GENERATOR.notString('음식의 이름'),
     blankFoodName: ERROR_MESSAGE_GENERATOR.blank('음식의 이름'),
     notNumberPrice: ERROR_MESSAGE_GENERATOR.notNumber('음식의 가격'),
+    notNumberDiscountAmount: ERROR_MESSAGE_GENERATOR.notNumber('음식의 할인할 가격'),
   };
 
   /**
@@ -78,6 +79,8 @@ class Food {
    * @param {number} amount 음식의 할인될 금액입니다.
    */
   discount(amount) {
+    this.#validateAmount(amount);
+
     if (this.#price.payment - amount < 0) {
       this.#price.discount = this.#price.cost;
       this.#price.payment = 0;
@@ -86,6 +89,12 @@ class Food {
 
     this.#price.discount += amount;
     this.#price.payment -= amount;
+  }
+
+  #validateAmount(amount) {
+    if (typeof amount !== 'number') {
+      throw new ApplicationError(Food.ERROR_MESSAGES.notNumberDiscountAmount);
+    }
   }
 }
 

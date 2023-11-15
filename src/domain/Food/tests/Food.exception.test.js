@@ -31,4 +31,18 @@ describe('Food 예외 테스트', () => {
     // then
     expect(result).toThrow(Food.ERROR_MESSAGES.notNumberPrice);
   });
+
+  it.each(DUMMY_INPUTS.withoutNumber)(
+    '할인금액이 숫자가 아니면 에러를 발생시킨다.',
+    ({ input }) => {
+      // given
+      const food = Food.of('케이크', 4_500);
+
+      // when
+      const result = () => food.discount(input);
+
+      // then
+      expect(result).toThrow(Food.ERROR_MESSAGES.notNumberDiscountAmount);
+    },
+  );
 });
