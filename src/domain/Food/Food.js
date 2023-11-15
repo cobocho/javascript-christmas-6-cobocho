@@ -1,8 +1,22 @@
+import ERROR_MESSAGE_GENERATOR from '../../constants/error.js';
+import ApplicationError from '../../exceptions/ApplicationError.js';
+import { isBlank } from '../../utils/validator/validator.js';
+
 /**
  * @typedef {import("../../types/price").PriceInfo} PriceInfo
  */
 
 class Food {
+  /**
+   * 음식의 에러 메세지입니다.
+   * @readonly
+   */
+  static ERROR_MESSAGES = {
+    notStringFoodName: ERROR_MESSAGE_GENERATOR.notString('음식의 이름'),
+    blankFoodName: ERROR_MESSAGE_GENERATOR.blank('음식의 이름'),
+    notNumberPrice: ERROR_MESSAGE_GENERATOR.notNumber('음식의 가격'),
+  };
+
   /**
    * 음식의 이름입니다.
    * @type {string}
@@ -24,6 +38,7 @@ class Food {
    * @param {number} price - 음식의 가격입니다.
    */
   constructor(name, price) {
+    this.#validate(name, price);
     this.#name = name;
     this.#price.cost = price;
     this.#price.payment = price;
@@ -36,6 +51,18 @@ class Food {
    */
   static of(name, price) {
     return new Food(name, price);
+  }
+
+  #validate(name, price) {
+    if (typeof name !== 'string') {
+      throw new ApplicationError(Food.ERROR_MESSAGES.notStringFoodName);
+    }
+    if (isBlank(name)) {
+      throw new ApplicationError(Food.ERROR_MESSAGES.blankFoodName);
+    }
+    if (typeof price !== 'number') {
+      throw new ApplicationError(Food.ERROR_MESSAGES.notNumberPrice);
+    }
   }
 
   /**
