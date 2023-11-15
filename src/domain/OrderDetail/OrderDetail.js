@@ -1,3 +1,6 @@
+import ERROR_MESSAGE_GENERATOR from '../../constants/error.js';
+import ApplicationError from '../../exceptions/ApplicationError.js';
+import { isSubClass } from '../../utils/validator/validator.js';
 import Food from '../Food/Food.js';
 
 /**
@@ -9,6 +12,15 @@ import Food from '../Food/Food.js';
  */
 
 class OrderDetail {
+  /**
+   * 음식의 에러 메세지입니다.
+   * @readonly
+   */
+  static ERROR_MESSAGES = {
+    invalidCategory: '주문내역 음식의 카테고리에 올바른 카테고리를 설정해주세요!',
+    notNumberQuantity: ERROR_MESSAGE_GENERATOR.notNumber('주문내역 음식의 갯수'),
+  };
+
   /**
    * 주문 내역의 메뉴 이름입니다.
    * @type {string}
@@ -25,6 +37,7 @@ class OrderDetail {
    * @param {OrderDetailRequirement} orderDetailRequirement
    */
   constructor({ foodName, foodCategory, quantity, price }) {
+    this.#validate({ foodCategory, quantity });
     this.#name = foodName;
     this.#foods = Array.from({ length: quantity }, () => foodCategory.of(foodName, price));
   }
@@ -35,6 +48,15 @@ class OrderDetail {
    */
   static of({ foodName, foodCategory, quantity, price }) {
     return new OrderDetail({ foodName, foodCategory, quantity, price });
+  }
+
+  #validate({ foodCategory, quantity }) {
+    if (!isSubClass(foodCategory, Food)) {
+      throw new ApplicationError(OrderDetail.ERROR_MESSAGES.invalidCategory);
+    }
+    if (typeof quantity !== 'number') {
+      throw new ApplicationError(OrderDetail.ERROR_MESSAGES.notNumberQuantity);
+    }
   }
 
   /**
