@@ -38,3 +38,10 @@ export const isIndivisible = (value, dividedValue) => dividedValue % value !== 0
  * @returns {boolean} Date의 유효성 여부입니다.
  */
 export const isInvalidDate = (date) => Number.isNaN(date.valueOf());
+
+/**
+ * 문자열이 공백인지 판별합니다.
+ * @param {string} value 체크할 문자열입니다.
+ * @returns {boolean} 공백 여부입니다.
+ */
+export const isBlank = (value) => value.trim().length === 0;

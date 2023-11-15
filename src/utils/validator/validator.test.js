@@ -4,6 +4,7 @@ import {
   invalidInstanceElement,
   isIndivisible,
   isInvalidDate,
+  isBlank,
 } from './validator.js';
 
 describe('유효성 검사 함수 테스트', () => {
@@ -162,4 +163,65 @@ describe('유효성 검사 함수 테스트', () => {
     // then
     expect(isInvalidDate(invalidDate)).toBe(result);
   });
+
+  it.each([
+    {
+      input: 10,
+      dividedValue: 3,
+      result: true,
+    },
+    {
+      input: 7,
+      dividedValue: 3,
+      result: true,
+    },
+    {
+      input: -10,
+      dividedValue: 3,
+      result: true,
+    },
+    {
+      input: 2,
+      dividedValue: 2,
+      result: false,
+    },
+    {
+      input: 5,
+      dividedValue: 10,
+      result: false,
+    },
+    {
+      input: -10,
+      dividedValue: -10,
+      result: false,
+    },
+  ])('나머지 몫 확인', ({ input, dividedValue, result }) => {
+    // given & when
+    const validateResult = isIndivisible(input, dividedValue);
+
+    // then
+    expect(validateResult).toBe(result);
+  });
+
+  it.each([{ input: '' }, { input: '  ' }, { input: '   ' }])(
+    '유효하지 않은 날짜 확인',
+    ({ input }) => {
+      // given & when
+      const result = isBlank(input);
+
+      // then
+      expect(result).toBeTruthy();
+    },
+  );
+
+  it.each([{ input: '글자' }, { input: '글자  ' }, { input: ' 글자 ' }, { input: ' 글자' }])(
+    '유효하지 않은 날짜 확인',
+    ({ input }) => {
+      // given & when
+      const result = isBlank(input);
+
+      // then
+      expect(result).toBeFalsy();
+    },
+  );
 });
