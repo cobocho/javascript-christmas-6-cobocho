@@ -1,4 +1,4 @@
-import { Receipt, Scheduler } from '../domain/index.js';
+import { OrderTaker, Receipt, Scheduler } from '../domain/index.js';
 
 const GiftService = Object.freeze({
   /**
@@ -25,9 +25,10 @@ const GiftService = Object.freeze({
     const giftEventScheduler = Scheduler.of();
     giftEventScheduler.addEventMonth(GiftService.EVENT_PERIOD.year, GiftService.EVENT_PERIOD.month);
     if (giftEventScheduler.isEventDate(receipt.getDate())) {
-      receipt.receiveGiveaway();
+      receipt.receiveGifts();
     }
-    const gifts = receipt.getGifts();
+    const gifts = OrderTaker.giveaway(receipt.getPrice().payment);
+    receipt.receiveGifts(gifts);
     const benefit = gifts.reduce((discounts, gift) => discounts + gift.getPrice().cost, 0);
     return gifts.length > 0 ? { name: GiftService.EVENT_NAME, benefit } : null;
   },

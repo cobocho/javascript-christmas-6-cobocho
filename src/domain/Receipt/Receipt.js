@@ -4,7 +4,6 @@ import AdditionalDiscount from '../AdditionalDiscount/AdditionalDiscount.js';
 import Drink from '../Food/Drink.js';
 import Food from '../Food/Food.js';
 import OrderDetail from '../OrderDetail/OrderDetail.js';
-import OrderTaker from '../OrderTaker/OrderTaker.js';
 
 class Receipt {
   /**
@@ -97,11 +96,13 @@ class Receipt {
   }
 
   /**
-   * 현재 결제 금액에 따른 증정품을 받습니다.
+   * 증정품을 반영합니다.
+   * @param {OrderDetail[]} gifts 증정품 내역들입니다.
    */
-  receiveGiveaway() {
-    const gifts = OrderTaker.giveaway(this.getPrice().cost);
-    this.#gifts.push(...gifts);
+  receiveGifts(gifts) {
+    if (gifts) {
+      this.#gifts.push(...gifts);
+    }
   }
 
   /**

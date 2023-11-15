@@ -79,20 +79,15 @@ describe('Receipt 테스트', () => {
     expect(receipt.getOrderDetails()).toEqual(orderDetails);
   });
 
-  it('`receiveGiveaway` 호출 시 현재 총 주문금액에 따라 `orderDetails`에 가격이 음수인 `OrderDetail`이 추가된다.', () => {
+  it('`receiveGifts` 호출 시 `gifts`에 `OrderDetail`이 추가된다.', () => {
     // given
-    const orderDetails = [
-      OrderTaker.takeOrder('초코케이크', 1),
-      OrderTaker.takeOrder('티본스테이크', 3),
-    ];
-    receipt.order(orderDetails);
+    const gifts = OrderTaker.giveaway(120_000);
 
     // when
-    receipt.receiveGiveaway();
-    const [gift] = receipt.getGifts();
+    receipt.receiveGifts(gifts);
+    const result = receipt.getGifts();
 
     // then
-    expect(gift).toBeDefined();
-    expect(receipt.getPrice().benefit).toBe(25_000);
+    expect(result).toHaveLength(1);
   });
 });

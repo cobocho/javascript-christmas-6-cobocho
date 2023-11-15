@@ -23,11 +23,11 @@ class Badge {
 
   /**
    * 혜택 금액에 따른 배지를 반환합니다.
-   * @param {number} price 혜택 금액입니다.
+   * @param {number} benefit 혜택 금액입니다.
    * @returns {Badge | null} 금액에 따른 배지입니다.
    */
-  static valueOf(price) {
-    const result = Badge.#BADGE_LIST.find((badge) => badge.minimumPrice <= price);
+  static valueOf(benefit) {
+    const result = Badge.#BADGE_LIST.find((badge) => badge.minimumPrice <= benefit);
     return result ? result.badge : null;
   }
 

@@ -255,7 +255,7 @@
 
 - [x] Receipt
 
-  - [x] `receiveGiveaway` 호출 시 현재 총 주문금액에 따라 `orderDetails`에 가격이 음수인 `OrderDetail`이 추가된다.
+  - [x] `receiveGifts` 호출 시 현재 총 주문금액에 따라 `orderDetails`에 가격이 음수인 `OrderDetail`이 추가된다.
 
 ## PHASE 4 (크리스마스 이벤트)
 
