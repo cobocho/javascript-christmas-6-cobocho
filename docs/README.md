@@ -323,6 +323,7 @@
 // OrderService.js
 const receiptDate = new Date(dateStringGenerator({ ...SYSTEM.date, day: date }));
 ```
+
 - 사용자가 입력한 값을 기반으로 시스템의 디폴트 일자를 기반으로한 발행일자를 생성한다.
 
 ```js
@@ -333,12 +334,14 @@ const receiptDate = new Date(dateStringGenerator({ ...SYSTEM.date, day: date }))
     }
   }
 ```
+
 - 발행일자의 유효성 검사를 진행한다.
 
 ```js
 // OrderService.js
 return Receipt.of(receiptDate);
 ```
+
 - 생성된 영수증을 반환한다.
 
 ## 메뉴 주문
@@ -357,6 +360,7 @@ return Receipt.of(receiptDate);
     return orders;
   }
 ```
+
 - 사용자가 입력한 주문을 파싱한다.
 
 ```js
@@ -389,12 +393,14 @@ const orderDetails = Array.from(orders, (order) => {
     return result;
   },
 ```
+
 - `OrderTaker`에게 주문을 요청해 `OrderDetail`을 생성한다.
 
 ```js
 // OrderService.js
 receipt.order(orderDetails);
 ```
+
 - 생성한 `OrderDetail`을 `Receipt`에 반영한다.
 
 ```js
@@ -414,6 +420,7 @@ receipt.order(orderDetails);
     }
   }
 ```
+
 - 생성된 `OrderDetail`이 주문 조건에 부합한지 유효성 검사를 진행한다.
 
 ## 증정품 부여
@@ -431,6 +438,7 @@ receipt.order(orderDetails);
     // ...
 });
 ```
+
 - 증정 이벤트의 기간을 `Scheduler`에 설정한 후 `Receipt`의 발행일자로 이벤트 기간인지 체크한다.
 
 ```js
@@ -451,12 +459,14 @@ const gifts = OrderTaker.giveaway(receipt.getPrice().payment);
     });
   },
 ```
+
 - `OrderTaker`에 주문 전 금액을 기입해 증정품을 반환받는다.
 
 ```js
 // GiftService.js
 receipt.receiveGifts(gifts);
 ```
+
 - 반환받은 증정품을 `Receipt`에 기입한다.
 
 ## 크리스마스 디데이 이벤트
@@ -468,6 +478,7 @@ receipt.receiveGifts(gifts);
 const discounter = DDayDiscounter.of();
 const result = discounter.run(receipt);
 ```
+
 - `DDayDiscounter`를 생성한 후 `Receipt`을 기입한다.
 
 ```js
@@ -483,10 +494,11 @@ const result = discounter.run(receipt);
       const scheduler = Scheduler.of();
       const { start, end } = DDayDiscounter.PERIOD;
       scheduler.addEventPeriod(new Date(start), new Date(end));
-  
+
       return scheduler.isEventDate(visitDate);
   }
 ```
+
 - 입력받은 `Receipt`의 발행일자가 크리스마스 디데이 할인 이벤트 기간과 동일한지 판별한다.
 
 ```js
@@ -502,6 +514,7 @@ const result = discounter.run(receipt);
     return { name: DDayDiscounter.EVENT_NAME, benefit: discount };
   }
 ```
+
 - 25일과의 일자 차이를 계산한 후 결과값을 `Receipt`에 기입한다.
 
 ## 요일 할인 이벤트
@@ -513,6 +526,7 @@ const result = discounter.run(receipt);
 const discounter = DayOfWeekDiscounter.of();
 const result = discounter.run(receipt);
 ```
+
 - `DayOfWeekDiscounter`를 생성한 후 `Receipt`을 기입한다.
 
 ```js
@@ -532,6 +546,7 @@ const result = discounter.run(receipt);
     return scheduler.isEventDate(visitDate);
   }
 ```
+
 - 입력받은 `Receipt`의 발행일자가 요일 할인 이벤트 기간과 동일한지 판별한다.
 
 ```js
@@ -562,8 +577,8 @@ const result = discounter.run(receipt);
     };
   }
 ```
-- `Receipt`로부터 `Food` 목록을 받고 이벤트 조건에 따라 할인을 반영한다.
 
+- `Receipt`로부터 `Food` 목록을 받고 이벤트 조건에 따라 할인을 반영한다.
 
 ## 특별 할인 이벤트
 
@@ -574,6 +589,7 @@ const result = discounter.run(receipt);
 const discounter = SpecialDiscounter.of();
 const result = discounter.run(receipt);
 ```
+
 - `SpecialDiscounter`를 생성한 후 `Receipt`을 기입한다.
 
 ```js
@@ -592,6 +608,7 @@ const result = discounter.run(receipt);
     return scheduler.isEventDate(visitDate);
   }
 ```
+
 - 입력받은 `Receipt`의 발행일자가 특별 할인 일자인지 판별한다.
 
 ```js
@@ -607,9 +624,11 @@ const result = discounter.run(receipt);
     return { name: SpecialDiscounter.EVENT_NAME, benefit: SpecialDiscounter.DISCOUNT_AMOUNT };
   }
 ```
--  `Receipt`에 특별 할인을 반영한다.
+
+- `Receipt`에 특별 할인을 반영한다.
 
 # 배지 이벤트
+
 ```js
 // BadgeService.js
   getBadge(receipt) {
@@ -624,8 +643,9 @@ const result = discounter.run(receipt);
     // ...
   },
 ```
+
 - `Receipt`의 방문일자가 배지 이벤트 기간인지 확인한다.
-  
+
 ```js
 // BadgeService.js
   getBadge(receipt) {
@@ -641,6 +661,7 @@ const result = discounter.run(receipt);
     return result ? result.badge : null;
   }
 ```
+
 - `Receipt`의 혜택 금액에 따라 배지를 생성 후 반환한다.
 
 # 기획팀 요구사항 다시 돌아보기
@@ -707,3 +728,7 @@ const result = discounter.run(receipt);
 - [x] `package.json`에 변경사항이 존재하지 않는가?
 - [x] `process.exit()`를 호출하는 코드가 존재하지 않는가?
 - [x] 컨트롤러에서 에러 핸들링이 이루어지는가?
+
+# 테스트 결과
+
+<img width="416" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/6187104d-bc20-4ae1-a128-9881809b9ab4">
