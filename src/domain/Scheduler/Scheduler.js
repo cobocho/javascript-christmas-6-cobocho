@@ -1,6 +1,7 @@
-import ApplicationError from '../../exceptions/ApplicationError.js';
 import { isSameDate } from '../../utils/date/date.js';
 import { isInvalidDate, isOutOfRange } from '../../utils/validator/validator.js';
+
+import ApplicationError from '../../exceptions/ApplicationError.js';
 
 class Scheduler {
   /**

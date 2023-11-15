@@ -1,6 +1,8 @@
 import { OrderTaker, Receipt } from '../domain/index.js';
-import SYSTEM from '../constants/system.js';
+
 import { dateStringGenerator } from '../utils/date/date.js';
+
+import SYSTEM from '../constants/system.js';
 
 const OrderService = Object.freeze({
   /**

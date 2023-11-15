@@ -1,7 +1,7 @@
-import AdditionalDiscount from '../AdditionalDiscount/AdditionalDiscount.js';
+import Discounter from './Discounter.js';
 import Receipt from '../Receipt/Receipt.js';
 import Scheduler from '../Scheduler/Scheduler.js';
-import Discounter from './Discounter.js';
+import AdditionalDiscount from '../AdditionalDiscount/AdditionalDiscount.js';
 
 class SpecialDiscounter extends Discounter {
   /**

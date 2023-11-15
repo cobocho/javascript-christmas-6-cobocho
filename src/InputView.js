@@ -1,4 +1,5 @@
 import { Console } from '@woowacourse/mission-utils';
+
 import QUERIES from './constants/queries.js';
 
 const InputView = Object.freeze({

@@ -1,9 +1,9 @@
-import { isWeekday } from '../../utils/date/date.js';
-import Dessert from '../Food/Dessert.js';
-import MainCourse from '../Food/MainCourse.js';
+import Discounter from './Discounter.js';
+import { Dessert, MainCourse } from '../Food/index.js';
 import Receipt from '../Receipt/Receipt.js';
 import Scheduler from '../Scheduler/Scheduler.js';
-import Discounter from './Discounter.js';
+
+import { isWeekday } from '../../utils/date/date.js';
 
 class DayOfWeekDiscounter extends Discounter {
   /**

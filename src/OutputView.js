@@ -1,4 +1,5 @@
 import { Console } from '@woowacourse/mission-utils';
+
 import MESSAGES from './constants/messages.js';
 import SYSTEM from './constants/system.js';
 

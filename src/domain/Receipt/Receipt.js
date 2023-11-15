@@ -1,9 +1,10 @@
-import ApplicationError from '../../exceptions/ApplicationError.js';
-import { isDuplicated, isInvalidDate } from '../../utils/validator/validator.js';
 import AdditionalDiscount from '../AdditionalDiscount/AdditionalDiscount.js';
-import Drink from '../Food/Drink.js';
-import Food from '../Food/Food.js';
 import OrderDetail from '../OrderDetail/OrderDetail.js';
+import { Food, Drink } from '../Food/index.js';
+
+import { isDuplicated, isInvalidDate } from '../../utils/validator/validator.js';
+
+import ApplicationError from '../../exceptions/ApplicationError.js';
 
 class Receipt {
   /**

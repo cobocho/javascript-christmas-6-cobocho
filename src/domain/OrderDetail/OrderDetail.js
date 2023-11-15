@@ -1,7 +1,10 @@
-import ERROR_MESSAGE_GENERATOR from '../../constants/error.js';
-import ApplicationError from '../../exceptions/ApplicationError.js';
-import { isSubClass } from '../../utils/validator/validator.js';
 import Food from '../Food/Food.js';
+
+import { isSubClass } from '../../utils/validator/validator.js';
+
+import ERROR_MESSAGE_GENERATOR from '../../constants/error.js';
+
+import ApplicationError from '../../exceptions/ApplicationError.js';
 
 /**
  * @typedef OrderDetailRequirement 주문 내역에 대한 생성 요구조건입니다.

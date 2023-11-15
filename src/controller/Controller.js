@@ -1,8 +1,11 @@
+import { GiftService, OrderService, DiscountService, BadgeService } from '../service/index.js';
+
 import InputView from '../InputView.js';
 import OutputView from '../OutputView.js';
-import SYSTEM from '../constants/system.js';
+
 import { Badge, Receipt } from '../domain/index.js';
-import { GiftService, OrderService, DiscountService, BadgeService } from '../service/index.js';
+
+import SYSTEM from '../constants/system.js';
 
 /**
  * @typedef {import('../service/DiscountService.js').BenefitResult} BenefitResult
