@@ -45,3 +45,19 @@ export const isInvalidDate = (date) => Number.isNaN(date.valueOf());
  * @returns {boolean} 공백 여부입니다.
  */
 export const isBlank = (value) => value.trim().length === 0;
+
+/**
+ * 해당 클래스가 특정 클래스의 서브클래스인지 판별합니다.
+ * @param {Function} subClass 체크할 서브클래스입니다.
+ * @param {Function} superClass 체크할 슈퍼클래스입니다.
+ * @returns {boolean} 상속 여부입니다.
+ */
+export const isSubClass = (subClass, superClass) => {
+  const superPrototype = superClass.prototype;
+  let targetPrototype = subClass.prototype;
+  do {
+    if (targetPrototype === superPrototype) return true;
+    targetPrototype = Object.getPrototypeOf(targetPrototype);
+  } while (targetPrototype);
+  return false;
+};

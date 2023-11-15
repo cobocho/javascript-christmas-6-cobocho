@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+
 import {
   isDuplicated,
   isOutOfRange,
@@ -5,6 +7,7 @@ import {
   isIndivisible,
   isInvalidDate,
   isBlank,
+  isSubClass,
 } from './validator.js';
 
 describe('유효성 검사 함수 테스트', () => {
@@ -224,4 +227,42 @@ describe('유효성 검사 함수 테스트', () => {
       expect(result).toBeFalsy();
     },
   );
+
+  it('서브클래스 확인', () => {
+    // given
+    class SuperClass {}
+    class SubClass extends SuperClass {}
+
+    // when
+    const result = isSubClass(SubClass, SuperClass);
+
+    // then
+    expect(result).toBeTruthy();
+  });
+
+  it('재상속 서브클래스 확인', () => {
+    // given
+    class SuperClass {}
+    class SubClass extends SuperClass {}
+    class SubSubClass extends SubClass {}
+
+    // when
+    const result = isSubClass(SubSubClass, SuperClass);
+
+    // then
+    expect(result).toBeTruthy();
+  });
+
+  it('서브클래스 확인', () => {
+    // given
+    class SuperClass {}
+    class OtherSuperClass {}
+    class OtherSubClass extends OtherSuperClass {}
+
+    // when
+    const result = isSubClass(OtherSubClass, SuperClass);
+
+    // then
+    expect(result).toBeFalsy();
+  });
 });
