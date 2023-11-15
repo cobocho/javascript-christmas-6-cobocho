@@ -24,13 +24,16 @@ const GiftService = Object.freeze({
   giveaway(receipt) {
     const giftEventScheduler = Scheduler.of();
     giftEventScheduler.addEventMonth(GiftService.EVENT_PERIOD.year, GiftService.EVENT_PERIOD.month);
-    if (giftEventScheduler.isEventDate(receipt.getDate())) {
-      receipt.receiveGifts();
+    if (!giftEventScheduler.isEventDate(receipt.getDate())) {
+      return null;
     }
     const gifts = OrderTaker.giveaway(receipt.getPrice().payment);
+    if (gifts.length === 0) {
+      return null;
+    }
     receipt.receiveGifts(gifts);
     const benefit = gifts.reduce((discounts, gift) => discounts + gift.getPrice().cost, 0);
-    return gifts.length > 0 ? { name: GiftService.EVENT_NAME, benefit } : null;
+    return { name: GiftService.EVENT_NAME, benefit };
   },
 });
 
