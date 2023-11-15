@@ -1,3 +1,4 @@
+import ERROR_MESSAGE_GENERATOR from '../../constants/error.js';
 import ApplicationError from '../../exceptions/ApplicationError.js';
 import { Appetizer, Dessert, Drink, MainCourse } from '../Food/index.js';
 import OrderDetail from '../OrderDetail/OrderDetail.js';
@@ -91,6 +92,7 @@ const OrderTaker = Object.freeze({
    * @readonly
    */ ERROR_MESSAGES: {
     invalidOrder: '유효하지 않은 주문입니다. 다시 입력해 주세요.',
+    notNumberPrice: ERROR_MESSAGE_GENERATOR.notNumber('증정품을 확인할 결제 금액'),
   },
 
   /**
@@ -113,10 +115,14 @@ const OrderTaker = Object.freeze({
 
   /**
    * 총 주문 금액에 따른 증정품을 반환합니다.
-   * @param {number} costPrice
+   * @param {number} costPrice 총 주문 금액입니다.
    * @returns {OrderDetail[]} 증정품 목록입니다.
    */
   giveaway(costPrice) {
+    if (typeof costPrice !== 'number') {
+      throw new ApplicationError(OrderTaker.ERROR_MESSAGES.notNumberPrice);
+    }
+
     const gifts = this.gifts.filter((giveaway) => giveaway.minimumCost <= costPrice);
     return Array.from(gifts, ({ giftName }) => {
       const { foodName, foodCategory, price } = this.findMenu(giftName);

@@ -1,3 +1,4 @@
+import DUMMY_INPUTS from '../../../constants/test-dummy.js';
 import OrderTaker from '../OrderTaker.js';
 
 describe('OrderTaker 테스트', () => {
@@ -20,6 +21,17 @@ describe('OrderTaker 테스트', () => {
 
       // then
       expect(result).toThrow(OrderTaker.ERROR_MESSAGES.invalidOrder);
+    },
+  );
+
+  it.each(DUMMY_INPUTS.withoutNumber)(
+    '`giveaway` 호출 시 유효하지 않은 결제 금액 입력 시 에러가 발생한다.',
+    ({ input }) => {
+      // given & when
+      const result = () => OrderTaker.giveaway(input);
+
+      // then
+      expect(result).toThrow(OrderTaker.ERROR_MESSAGES.notNumberPrice);
     },
   );
 });
