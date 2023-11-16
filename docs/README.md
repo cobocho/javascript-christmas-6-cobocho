@@ -1,10 +1,10 @@
 # 🚦 프로세스 요약
 
-<img width="1337" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/2fad6650-2bd1-4b74-b2d3-5495efbea5f9">
+<img width="1096" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/848e687c-dcc8-46d1-bcce-d0962494f61f">
 
 ## 영수증 생성
 
-<img width="800" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/ead74bdf-3a01-40f0-8378-1ccf2e78ebec">
+<img width="1000" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/ec620d1d-1129-4b14-8d9a-7dbd9bc026dc">
 
 ```js
 // OrderService.js
@@ -33,7 +33,7 @@ return Receipt.of(receiptDate);
 
 ## 메뉴 주문
 
-<img width="800" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/64813864-8715-4297-be39-9ecd45a52d0b">
+<img width="1000" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/71401d33-1e6a-4806-8425-daf39f9a7bf0">
 
 ```js
 // Controller.js
@@ -112,7 +112,7 @@ receipt.order(orderDetails);
 
 ## 증정품 부여
 
-<img width="800" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/2fc4a7ad-1028-4e06-bf39-6b1bbc0c9802">
+<img width="1000" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/a33881b4-6f9c-4d11-ba02-047bcdf123ed">
 
 ```js
 // GiftService.js
@@ -158,7 +158,7 @@ receipt.receiveGifts(gifts);
 
 ## 크리스마스 디데이 이벤트
 
-<img width="800" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/1b3a4b0d-a8df-4dce-b508-d2ec4c16a464">
+<img width="1000" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/dcf2b059-a662-4b87-8122-c8f95b76a3ee">
 
 ```js
 // DiscountService.js
@@ -206,7 +206,7 @@ const result = discounter.run(receipt);
 
 ## 요일 할인 이벤트
 
-<img width="800" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/d06bee85-677f-41d3-b80c-29bc7750121d">
+<img width="1000" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/14c6e090-8150-43ad-96ad-63e17a651764">
 
 ```js
 // DiscountService.js
@@ -269,7 +269,7 @@ const result = discounter.run(receipt);
 
 ## 특별 할인 이벤트
 
-<img width="800" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/d06bee85-677f-41d3-b80c-29bc7750121d">
+<img width="1000" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/147f4f37-682c-4e3e-9995-4607c7cd3a72">
 
 ```js
 // DiscountService.js
@@ -315,6 +315,8 @@ const result = discounter.run(receipt);
 - `Receipt`에 특별 할인을 반영한다.
 
 # 배지 이벤트
+
+<img width="1000" alt="image" src="https://github.com/cobocho/javascript-christmas-6-cobocho/assets/99083803/c90d2c14-3d94-46cd-b1b6-3e98e600665f">
 
 ```js
 // BadgeService.js
